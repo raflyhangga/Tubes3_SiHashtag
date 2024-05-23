@@ -1,0 +1,18 @@
+version: '3'
+
+services:
+  db:
+    image: mariadb:latest
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: tubes3_stima24
+    ports:
+      - "3308:3306"
+  app:
+    image: tubes3_stima24
+    build:
+      context: .
+    network_mode: "host"
+    depends_on:
+      - db

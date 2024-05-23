@@ -15,6 +15,35 @@
         <vm:MainWindowViewModel/>
     </Design.DataContext>
 
-    <TextBlock Text="{Binding Greeting}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+    <Grid ColumnDefinitions="*,*,*" RowDefinitions="2*,*"  Margin="20">
+		<Image Grid.Row="0" Grid.Column="0" x:Name="ImageDisplayerChoosen"/>
+		<Image Grid.Row="0" Grid.Column="0" x:Name="ImageDisplayerResult"/>
 
+		<Border Grid.Row="0" Grid.Column="2" Margin="20" Background="WhiteSmoke" CornerRadius="20">
+			<Grid Grid.Row="0" Grid.Column="2" ColumnDefinitions="*" RowDefinitions="*,*,*,*,*,*,*,*,*,*"  Margin="20">
+				<TextBlock  Text="Nama: "				Grid.Row="0" Grid.Column="0"/>
+				<TextBlock Text="Tempat Lahir: "		Grid.Row="1" Grid.Column="0"/>
+				<TextBlock Text="Tanggal Lahir: "		Grid.Row="2" Grid.Column="0"/>
+				<TextBlock Text="Jenis Kelamin: "		Grid.Row="3" Grid.Column="0"/>
+				<TextBlock Text="Golongan Darah: "		Grid.Row="4" Grid.Column="0"/>
+				<TextBlock Text="Alamat: "				Grid.Row="5" Grid.Column="0"/>
+				<TextBlock Text="Agama: "				Grid.Row="6" Grid.Column="0"/>
+				<TextBlock Text="Status Perkawinan: "	Grid.Row="7" Grid.Column="0"/>
+				<TextBlock Text="Pekerjaan: "			Grid.Row="8" Grid.Column="0"/>
+				<TextBlock Text="Kewarganegaraan: "		Grid.Row="9" Grid.Column="0"/>
+			</Grid>
+		</Border>
+
+        <Button Grid.Row="1" Grid.Column="0" Click="OnImagePickerClicked">Pilih Citra</Button>
+		<Button Grid.Row="1" Grid.Column="1" Click="OnSearch">Search</Button>
+
+		<!-- Waktu pencarian, Persentase kecocokan -->
+        <Grid Grid.Row="1" Grid.Column="2" ColumnDefinitions="*" RowDefinitions="*,*,*,*"  Margin="20">
+			<TextBlock Text="Waktu Pencarian:" Grid.Row="0" Grid.Column="0"/>
+			<TextBlock Text="xxx ms" Grid.Row="1" Grid.Column="0"/>
+			<TextBlock Margin="0,20,0,0" Text="Persentase Kecocokan:" Grid.Row="2" Grid.Column="0"/>
+			<TextBlock Text="xx %" Grid.Row="3" Grid.Column="0"/>
+		</Grid>
+	</Grid>
+    
 </Window>
