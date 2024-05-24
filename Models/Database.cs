@@ -21,9 +21,11 @@ public class Database{
         } catch(MySqlException ex) {
             Console.Write(ex.ToString());
         }   
+
     }
 
     public static MySqlDataReader Execute(string query) {
+        if(!_initialized) Initialize();
         MySqlCommand cmd = new MySqlCommand(query, _connection);
         return cmd.ExecuteReader();
     }

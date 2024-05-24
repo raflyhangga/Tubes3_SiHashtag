@@ -12,6 +12,7 @@ namespace Tubes3_SiHashtag.Views;
 
 public partial class MainWindow : Window
 {
+    SolveAlgorithm _solveAlgorithm = SolveAlgorithm.BM;
     public MainWindow()
     {
         Database.Initialize();
@@ -45,4 +46,10 @@ public partial class MainWindow : Window
     {
         Console.WriteLine("Helloooo");
     }
+
+    public void OnSetKMP(object sender, RoutedEventArgs args)
+        => _solveAlgorithm = SolveAlgorithm.KMP;
+
+    public void OnSetBM(object sender, RoutedEventArgs args)
+        => _solveAlgorithm = SolveAlgorithm.BM;
 }

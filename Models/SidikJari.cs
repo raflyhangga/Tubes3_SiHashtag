@@ -1,37 +1,64 @@
-using Avalonia.Controls;
 using MySql.Data.MySqlClient;
-using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Drawing;
+using System;
 
 public class SidikJari{
     string berkas_citra; // path to image file
     string nama;
 
+    public SidikJari(string berkas_citra, string nama){
+        this.berkas_citra = berkas_citra;
+        this.nama = nama;
+    }
+
     public static List<SidikJari> GetAll(){
         MySqlDataReader reader = Database.Execute("SELECT * FROM sidik_jari");
         List<SidikJari> list = new List<SidikJari>();
         while(reader.Read()){
-            SidikJari sidikJari = new SidikJari();
-            sidikJari.berkas_citra = reader.GetString("berkas_citra");
-            sidikJari.nama = reader.GetString("nama");
+            SidikJari sidikJari = new SidikJari(
+                reader.GetString("berkas_citra"),
+                reader.GetString("nama")
+            );
             list.Add(sidikJari);
         }
         return list;
     }
 
     public string ReadImageASCII(){
-        FileStream fs = new FileStream(berkas_citra, FileMode.Open, FileAccess.Read);
-        List<byte> image = new List<byte>();
-        while(fs.Position < fs.Length){
-            image.Add((byte)fs.ReadByte());
+        Bitmap image = new Bitmap(berkas_citra);
+
+        string binaryStr = "";
+        string ascii = "";
+        for (int y = 0; y < image.Height; y++) {
+            for (int x = 0; x < image.Width; x++) {
+                Color pixelColor = image.GetPixel(x, y);
+                double grayscale = (pixelColor.R * 0.299 + pixelColor.G * 0.587 + pixelColor.B * 0.114) / 255.0;
+                int binaryValue = grayscale > 0.5 ? 1 : 0;
+                binaryStr += binaryValue;
+                
+                if (binaryStr.Length == 8) {
+                    byte binaryByte = Convert.ToByte(binaryStr, 2);
+                    ascii += (char)binaryByte;
+                    binaryStr = "";
+                }
+            }
         }
 
-        // convert to ASCII
-        string ascii = "";
-        foreach(byte b in image){
-            ascii += (char)b;
+
+        // Handle if any remaining bits
+        if (binaryStr.Length > 0) {
+            // add 0 until 8 bits
+            while (binaryStr.Length < 8) {
+                binaryStr += "0";
+            }
+            byte binaryByte = Convert.ToByte(binaryStr, 2);
+            ascii += (char)binaryByte;
         }
+
+        // Dispose of the image
+        image.Dispose();
         return ascii;
     }
 
@@ -39,9 +66,10 @@ public class SidikJari{
     public static void SaveAllImagesInPathToDatabase(string path){
         string[] files = Directory.GetFiles(path);
         foreach(string file in files){
-            SidikJari sj = new SidikJari();
-            sj.berkas_citra = Path.Join(path, file);
-            sj.nama = file;
+            SidikJari sj = new SidikJari(
+                Path.Join(path, file),
+                file
+            );
             sj.Save();
         }
     }
