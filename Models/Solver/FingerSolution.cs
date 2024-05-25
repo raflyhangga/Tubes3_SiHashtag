@@ -1,24 +1,28 @@
 using System.Diagnostics;
 
 public class FingerSolution{
-    Biodata _biodata;
-    public Biodata Biodata => _biodata;
 
+    public Biodata Biodata {
+        get => _biodata;
+        set => _biodata = value;
+    }
+
+    public SidikJari SidikJari {
+        get => _sidikJari;
+        set => _sidikJari = value;
+    }
+
+    public double PersentaseKecocokan {
+        get => _persentaseKecocokan;
+        set => _persentaseKecocokan = value;
+    }
+
+    Biodata _biodata;
+    SidikJari _sidikJari;
     double _persentaseKecocokan;
-    public double PersentaseKecocokan => _persentaseKecocokan;
 
     Stopwatch _stopWatch = new Stopwatch();
     public long ExecutionTime => _stopWatch.ElapsedMilliseconds;
-
-    public FingerSolution SetBiodata(Biodata biodata){
-        _biodata = biodata;
-        return this;
-    }
-
-    public FingerSolution SetPersentaseKecocokan(double persentaseKecocokan){
-        _persentaseKecocokan = persentaseKecocokan;
-        return this;
-    }
 
     public FingerSolution StartTimer(){
         _stopWatch.Start();

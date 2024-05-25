@@ -5,12 +5,17 @@ using System.Drawing;
 using System;
 
 public class SidikJari{
-    string berkas_citra; // path to image file
-    string nama;
+    public string BerkasCitra => _berkasCitra;
+    public string Nama => _nama;
+    public string Ascii => _ascii; // generated later
+
+    string _berkasCitra; // path to image file
+    string _nama;
+    string _ascii;
 
     public SidikJari(string berkas_citra, string nama){
-        this.berkas_citra = berkas_citra;
-        this.nama = nama;
+        this._berkasCitra = berkas_citra;
+        this._nama = nama;
     }
 
     public static List<SidikJari> GetAll(){
@@ -27,7 +32,7 @@ public class SidikJari{
     }
 
     public string ReadImageASCII(){
-        Bitmap image = new Bitmap(berkas_citra);
+        Bitmap image = new Bitmap(_berkasCitra);
 
         string binaryStr = "";
         string ascii = "";
@@ -70,12 +75,14 @@ public class SidikJari{
                 Path.Join(path, file),
                 file
             );
+            // TODO: generate ascii before saving
             sj.Save();
         }
     }
 
     public void Save(){
-        Database.Execute("INSERT INTO sidik_jari (berkas_citra, nama) VALUES ('"+berkas_citra+"', '"+nama+"')");
+        // TODO: also save the ascii
+        Database.Execute("INSERT INTO sidik_jari (berkas_citra, nama) VALUES ('"+_berkasCitra+"', '"+_nama+"')");
     }
 
 }

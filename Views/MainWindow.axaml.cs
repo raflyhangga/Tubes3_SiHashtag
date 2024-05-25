@@ -12,7 +12,10 @@ namespace Tubes3_SiHashtag.Views;
 
 public partial class MainWindow : Window
 {
-    SolveAlgorithm _solveAlgorithm = SolveAlgorithm.BM;
+    // SolveAlgorithm _solveAlgorithm = SolveAlgorithm.BM;
+    FingerSolver _solver = new BMSolver();
+
+    IStorageFile _currentImageFile;
     public MainWindow()
     {
         Database.Initialize();
@@ -23,9 +26,6 @@ public partial class MainWindow : Window
 
     public async void OnImagePickerClicked(object sender, RoutedEventArgs args)
     {
-
-        // img.Source = new Bitmap("/Assets/avalonia-logo.ico");
-
         var topLevel = TopLevel.GetTopLevel(this);
 
         var files = await topLevel.StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
@@ -37,6 +37,7 @@ public partial class MainWindow : Window
 
         if (files.Count >= 1)
         {
+            _currentImageFile = files[0];
             await using var stream = await files[0].OpenReadAsync();
             ImageDisplayerChoosen.Source = new Bitmap(stream);
         }
@@ -44,12 +45,27 @@ public partial class MainWindow : Window
 
     public async void OnSearch(object sender, RoutedEventArgs args)
     {
-        Console.WriteLine("Helloooo");
+        SidikJari sj = new SidikJari(_currentImageFile.Path.ToString(), "");
+        FingerSolution solution = _solver.ProcessCalculation(sj);
+        Nama.Text = solution.Biodata.Nama;
+        NIK.Text = solution.Biodata.NIK;
+        TempatLahir.Text = solution.Biodata.TempatLahir;
+        TanggalLahir.Text = solution.Biodata.TanggalLahir.ToString();
+        JenisKelamin.Text = solution.Biodata.JenisKelamin;
+        GolonganDarah.Text = solution.Biodata.GolonganDarah;
+        Alamat.Text = solution.Biodata.Alamat;
+        Agama.Text = solution.Biodata.Agama;
+        StatusPerkawinan.Text = solution.Biodata.StatusPerkawinan;
+        Pekerjaan.Text = solution.Biodata.Pekerjaan;
+        Kewarganegaraan.Text = solution.Biodata.Kewarganegaraan;
+        
+        PersentaseKecocokan.Text = solution.PersentaseKecocokan.ToString() + "%";
+        ExecutionTime.Text = solution.ExecutionTime.ToString() + " ms";
     }
 
     public void OnSetKMP(object sender, RoutedEventArgs args)
-        => _solveAlgorithm = SolveAlgorithm.KMP;
+        => _solver = new KMPSolver();
 
     public void OnSetBM(object sender, RoutedEventArgs args)
-        => _solveAlgorithm = SolveAlgorithm.BM;
+        => _solver = new BMSolver();
 }

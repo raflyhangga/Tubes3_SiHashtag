@@ -3,7 +3,21 @@ using System;
 using System.Collections.Generic;
 
 public class Biodata{
-    string NIK;
+    // Getter
+    public string NIK => nik;
+    public string Nama => nama;
+    public string TempatLahir => tempat_lahir;
+    public DateTime TanggalLahir => tanggal_lahir;
+    public string JenisKelamin => jenis_kelamin;
+    public string GolonganDarah => golongan_darah;
+    public string Alamat => alamat;
+    public string Agama => agama;
+    public string StatusPerkawinan => status_perkawinan;
+    public string Pekerjaan => pekerjaan;
+    public string Kewarganegaraan => kewarganegaraan;
+
+
+    string nik;
     string nama;
     string tempat_lahir;
     DateTime tanggal_lahir;
@@ -20,7 +34,7 @@ public class Biodata{
         List<Biodata> list = new List<Biodata>();
         while(reader.Read()){
             Biodata biodata = new Biodata();
-            biodata.NIK = reader.GetString("NIK");
+            biodata.nik = reader.GetString("NIK");
             biodata.nama = reader.GetString("nama");
             biodata.tempat_lahir = reader.GetString("tempat_lahir");
             biodata.tanggal_lahir = reader.GetDateTime("tanggal_lahir");

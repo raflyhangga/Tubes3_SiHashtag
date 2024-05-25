@@ -22,39 +22,41 @@
 		<Border Grid.Row="0" Grid.Column="0" Margin="20" Background="#0f172a" CornerRadius="20">
 			<Image x:Name="ImageDisplayerChoosen"/>
 		</Border>
-		<Border Grid.Row="0" Grid.Column="0" Margin="20" Background="#0f172a" CornerRadius="20">
+		<Border Grid.Row="0" Grid.Column="1" Margin="20" Background="#0f172a" CornerRadius="20">
 			<Image x:Name="ImageDisplayerResult"/>
 		</Border>
 
 		<Border Grid.Row="0" Grid.Column="2" Margin="20" Background="#0f172a" CornerRadius="20">
-			<Grid Grid.Row="0" Grid.Column="2" ColumnDefinitions="*" RowDefinitions="*,*,*,*,*,*,*,*,*,*"  Margin="20">
-				<TextBlock Text="Nama: "				Grid.Row="0" Grid.Column="0"/>
-				<TextBlock Text="Tempat Lahir: "		Grid.Row="1" Grid.Column="0"/>
-				<TextBlock Text="Tanggal Lahir: "		Grid.Row="2" Grid.Column="0"/>
-				<TextBlock Text="Jenis Kelamin: "		Grid.Row="3" Grid.Column="0"/>
-				<TextBlock Text="Golongan Darah: "		Grid.Row="4" Grid.Column="0"/>
-				<TextBlock Text="Alamat: "				Grid.Row="5" Grid.Column="0"/>
-				<TextBlock Text="Agama: "				Grid.Row="6" Grid.Column="0"/>
-				<TextBlock Text="Status Perkawinan: "	Grid.Row="7" Grid.Column="0"/>
-				<TextBlock Text="Pekerjaan: "			Grid.Row="8" Grid.Column="0"/>
-				<TextBlock Text="Kewarganegaraan: "		Grid.Row="9" Grid.Column="0"/>
+			<Grid Grid.Row="0" Grid.Column="2" ColumnDefinitions="*" RowDefinitions="*,*,*,*,*,*,*,*,*,*,*"  Margin="20">
+				<TextBlock x:Name="Nama" 			 	Text="Nama: "				Grid.Row="0" Grid.Column="0" Foreground="White"/>
+				<TextBlock x:Name="NIK" 	 			Text="NIK: "				Grid.Row="1" Grid.Column="0" Foreground="White"/>
+				<TextBlock x:Name="TempatLahir" 	 	Text="Tempat Lahir: "		Grid.Row="2" Grid.Column="0" Foreground="White"/>
+				<TextBlock x:Name="TanggalLahir" 	 	Text="Tanggal Lahir: "		Grid.Row="3" Grid.Column="0" Foreground="White"/>
+				<TextBlock x:Name="JenisKelamin" 	 	Text="Jenis Kelamin: "		Grid.Row="4" Grid.Column="0" Foreground="White"/>
+				<TextBlock x:Name="GolonganDarah"   	Text="Golongan Darah: "		Grid.Row="5" Grid.Column="0" Foreground="White"/>
+				<TextBlock x:Name="Alamat" 		 		Text="Alamat: "				Grid.Row="6" Grid.Column="0" Foreground="White"/>
+				<TextBlock x:Name="Agama" 			 	Text="Agama: "				Grid.Row="7" Grid.Column="0" Foreground="White"/>
+				<TextBlock x:Name="StatusPerkawinan"	Text="Status Perkawinan: "	Grid.Row="8" Grid.Column="0" Foreground="White"/>
+				<TextBlock x:Name="Pekerjaan" 		 	Text="Pekerjaan: "			Grid.Row="9" Grid.Column="0" Foreground="White"/>
+				<TextBlock x:Name="Kewarganegaraan" 	Text="Kewarganegaraan: "	Grid.Row="10" Grid.Column="0" Foreground="White"/>
 			</Grid>
 		</Border>
 
-		<Button Grid.Row="1" Grid.Column="0" Click="OnImagePickerClicked">Pilih Citra</Button>
+		<Button Grid.Row="1" Grid.Column="0" Click="OnImagePickerClicked" Foreground="White" Background="Indigo" CornerRadius="10">Pilih Citra</Button>
 		
 		
 		<Grid Grid.Row="1" Grid.Column="1" ColumnDefinitions="*" RowDefinitions="*,*"  Margin="20">
-			<Button Grid.Row="0" Grid.Column="0" Click="OnSearch">Search</Button>
+			<Button Grid.Row="0" Grid.Column="0" Click="OnSearch" Foreground="White" Background="Indigo" CornerRadius="10">Search</Button>
 			<Button Grid.Row="1" Grid.Column="0" Click="OnSearch">Algorithm</Button>
+			
 		</Grid>
 
 		<!-- Waktu pencarian, Persentase kecocokan -->
 		<Grid Grid.Row="1" Grid.Column="2" ColumnDefinitions="*" RowDefinitions="*,*,*,*"  Margin="20">
-			<TextBlock Text="Waktu Pencarian:" Grid.Row="0" Grid.Column="0"/>
-			<TextBlock Text="xxx ms" Grid.Row="1" Grid.Column="0"/>
-			<TextBlock Margin="0,20,0,0" Text="Persentase Kecocokan:" Grid.Row="2" Grid.Column="0"/>
-			<TextBlock Text="xx %" Grid.Row="3" Grid.Column="0"/>
+			<TextBlock Text="Waktu Pencarian:" Grid.Row="0" Grid.Column="0" Foreground="White"/>
+			<TextBlock x:Name="ExecutionTime" Text="xxx ms" Grid.Row="1" Grid.Column="0" Foreground="White"/>
+			<TextBlock Margin="0,20,0,0" Text="Persentase Kecocokan:" Grid.Row="2" Grid.Column="0" Foreground="White"/>
+			<TextBlock x:Name="PersentaseKecocokan" Text="xx %" Grid.Row="3" Grid.Column="0" Foreground="White"/>
 		</Grid>
 	</Grid>
 

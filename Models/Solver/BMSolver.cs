@@ -1,5 +1,8 @@
+using System.Collections.Generic;
+
 public class BMSolver : FingerSolver{
-    public override FingerSolution Solve(SidikJari sj){
-        return null;
+
+    protected override void ProcessCalculation(SidikJari sj, List<SidikJari> listSj, ref FingerSolution sol){
+
     }
 }
