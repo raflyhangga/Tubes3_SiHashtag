@@ -45,44 +45,6 @@ public class BMSolver : FingerSolver{
         for (i = 0; i < size; i++)
             badchar[(int)pat[i]] = i;
     }
-
-    static void GoodSuffixHeuristic(string pat, int[] goodSuffixShift)
-    {
-        int m = pat.Length;
-        int i, j;
-
-        // Initialize the suffixes array
-        int[] suffixes = new int[m-1];
-        suffixes[m - 1] = m;
-        for (i = m - 2, j = m - 1; i >= 0; i--)
-        {
-            while (j < m - 1 && pat[i] != pat[j])
-                j = suffixes[j + 1] - 1;
-            suffixes[i] = --j + 1;
-        }
-
-        // Initialize the goodSuffixShift array
-        for (i = 0; i < m; i++)
-            goodSuffixShift[i] = m;
-
-        // Populate the goodSuffixShift array
-        for (i = m - 1; i >= 0; i--)
-        {
-            if (suffixes[i] == i + 1)
-            {
-                for (j = 0; j < m - 1 - i; j++)
-                {
-                    if (goodSuffixShift[j] == m)
-                        goodSuffixShift[j] = m - 1 - i;
-                }
-            }
-        }
-
-        for (i = 0; i <= m - 2; i++)
-        {
-            goodSuffixShift[m - 1 - suffixes[i]] = m - 1 - i;
-        }
-    }
  
     /* A pattern searching function that uses Bad
     Character Heuristic of Boyer Moore Algorithm */
@@ -92,13 +54,11 @@ public class BMSolver : FingerSolver{
         int n = txt.Length;
  
         int[] badchar = new int[256];
-        int[] goodSuffixShift = new int[256];
  
         /* Fill the bad character array by calling
             the preprocessing function badCharHeuristic()
             for given pattern */
         BadCharHeuristic(pat, badchar);
-        GoodSuffixHeuristic(pat, goodSuffixShift);
  
         int s = 0; // s is shift of the pattern with
                    // respect to text
@@ -134,7 +94,7 @@ public class BMSolver : FingerSolver{
                    shift if the last occurrence of bad
                    character in pattern is on the right side
                    of the current character. */
-                s += (goodSuffixShift[j] > j - badchar[txt[s+j]])? goodSuffixShift[j] :  j - badchar[txt[s+j]];
+                s += (1 > j - badchar[txt[s+j]])? 1 :  j - badchar[txt[s+j]];
         }
         return -1;
     }
