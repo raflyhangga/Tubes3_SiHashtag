@@ -65,12 +65,29 @@ public class Seeder{
             if(progress % 1000 == 0) Console.WriteLine(progress+" images seeded");
         }
 
+        long count = (long) Math.Pow(10,16);
         foreach(SidikJari sj in sjList){
             MySqlDataReader reader = Database.Execute("INSERT INTO sidik_jari (berkas_citra, nama, ascii) VALUES (@berkas_citra, @nama, @ascii)", 
                 ("@berkas_citra", sj.BerkasCitra),
                 ("@nama", sj.Nama),
                 ("@ascii", sj.Ascii)
             );
+
+            reader.Close();
+
+            reader = Database.Execute("INSERT INTO biodata (NIK, nama, tempat_lahir, jenis_kelamin, golongan_darah, alamat, agama, status_perkawinan, pekerjaan, kewarganegaraan) VALUES (@berkas_citra, @nama, @ascii)", 
+            ("@NIK", count++),
+            ("@nama", sj.Nama), 
+            ("@tempat_lahir", "tempat_lahir"), 
+            ("@jenis_kelamin", Random.Shared.Choice("Laki-laki", "Perempuan")), 
+            ("@golongan_darah", "A"),
+            ("@alamat", "alamat"),
+            ("@agama", "agama"), 
+            ("@status_perkawinan", Random.Shared.Choice("Belum menikah", "Menikah")),
+            ("@pekerjaan", "pekerjaan"), 
+            ("@kewarganegaraan", "kewarganegaraan")
+            );
+
             reader.Close();
         }
     }
