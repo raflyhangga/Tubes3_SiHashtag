@@ -56,21 +56,22 @@ public class Seeder{
 
         string[] filePathList = Directory.GetFiles(imageFolderPath);
         int progress = 0;
+        List<SidikJari> sjList = new List<SidikJari>(filePathList.Length);
         foreach(string file in filePathList){
             string name = Path.GetFileNameWithoutExtension(file);
             SidikJari sj = new SidikJari(file, name);
-            MySqlDataReader reader = Database.Execute("INSERT INTO sidik_jari (berkas_citra, nama, ascii) VALUES (@berkas_citra, @nama, @ascii)", 
-            
-                new List<Tuple<string,string>>() {
-                    new Tuple<string,string>("@berkas_citra", sj.BerkasCitra),
-                    new Tuple<string,string>("@nama", sj.Nama),
-                    new Tuple<string,string>("@ascii", sj.Ascii)
-                }
-            
-            );
-            reader.Close();
+            sjList.Add(sj);
             progress++;
             if(progress % 1000 == 0) Console.WriteLine(progress+" images seeded");
+        }
+
+        foreach(SidikJari sj in sjList){
+            MySqlDataReader reader = Database.Execute("INSERT INTO sidik_jari (berkas_citra, nama, ascii) VALUES (@berkas_citra, @nama, @ascii)", 
+                ("@berkas_citra", sj.BerkasCitra),
+                ("@nama", sj.Nama),
+                ("@ascii", sj.Ascii)
+            );
+            reader.Close();
         }
     }
 }

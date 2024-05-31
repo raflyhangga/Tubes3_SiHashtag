@@ -30,7 +30,7 @@ public class Database{
         MySqlCommand cmd = new MySqlCommand(query, _connection);
         return cmd.ExecuteReader();
     }
-    public static MySqlDataReader Execute(string query, List<Tuple<string,string>> parameters) {
+    public static MySqlDataReader Execute(string query, params (string, string)[] parameters) {
         if(!_initialized) Initialize();
         MySqlCommand cmd = new MySqlCommand(query, _connection);
         foreach(var tuple in parameters){
