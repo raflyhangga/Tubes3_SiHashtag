@@ -40,13 +40,32 @@ public abstract class FingerSolver{
     private Biodata FindBiodata(SidikJari sj) {
         List<Biodata> biodataList = Biodata.GetAll();
         Biodata result = null;
+        double _smallestDistance = double.MaxValue;
         foreach(Biodata biodata in biodataList){
+
             string bioName = StringConverter.StringConvert(biodata.Nama);
             string sjName = StringConverter.StringConvert(sj.Nama);
-            if(bioName.Equals(sjName)){
+            
+            // pure string compute
+            double pureLevenshteinDistance = LevenshteinDistance.Solve(biodata.Nama, sj.Nama);
+            double pureNormalized = pureLevenshteinDistance/(3*double.Max(biodata.Nama.Length, sj.Nama.Length));
+
+            // corrupted + pure string compute
+            double corruptedLevenshteinDistance = LevenshteinDistance.Solve(bioName, sjName);
+            double corruptedNormalized = (corruptedLevenshteinDistance/(3*double.Max(bioName.Length, sjName.Length)) + pureNormalized) / 2;
+
+            // result
+            double minResult = double.Min(pureLevenshteinDistance, corruptedNormalized);
+            if(_smallestDistance > minResult){
+                _smallestDistance = minResult;
                 result = biodata;
-                break;
+                if(_smallestDistance == 0){
+                    System.Console.WriteLine("asw");
+                    System.Console.WriteLine(biodata.Nama);
+                    return result;
+                }
             }
+
         }
         return result;
     }

@@ -10,8 +10,8 @@ public class StringConverter
             {"g", "6"},
             {"s", "5"},
             {"z", "2"},
-            {"[aeiou4013]", string.Empty},
-            {@"\s+", String.Empty},
+            {"[aeiou4013]", "\0"},
+            {@"\s+", "\0"},
         };
     public static string StringConvert(string input)
     {
