@@ -110,7 +110,7 @@ public class Seeder{
             if(++unsafeCounter % 1000 == 0) Console.WriteLine(unsafeCounter+" images converted");
         });
         stopwatch.Stop();
-        Console.WriteLine("Asscii conversion finished in "+stopwatch.ElapsedMilliseconds+" ms");
+        Console.WriteLine("Ascii conversion finished in "+stopwatch.ElapsedMilliseconds+" ms");
 
 
 
