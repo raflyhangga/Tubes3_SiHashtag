@@ -47,15 +47,15 @@ public partial class MainWindow : Window
 
     private void ToggleSwitch_Checked(object? sender, RoutedEventArgs e)
     {
-        System.Console.WriteLine("Switching algorithms to KMP");
-        _solver = new KMPSolver();
+        System.Console.WriteLine("Switching algorithms to BM");
+        _solver = new BMSolver();
     }
 
     private void ToggleSwitch_Unchecked(object? sender, RoutedEventArgs e)
     {
         System.Console.WriteLine("Toggle Switch is OFF");
-        System.Console.WriteLine("Switching algorithms to BM");
-        _solver = new BMSolver();
+        System.Console.WriteLine("Switching algorithms to KMP");
+        _solver = new KMPSolver();
     }
 
     public void OnSearch(object sender, RoutedEventArgs args)
