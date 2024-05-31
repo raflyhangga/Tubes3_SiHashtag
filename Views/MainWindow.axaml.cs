@@ -45,7 +45,8 @@ public partial class MainWindow : Window
 
     public void OnSearch(object sender, RoutedEventArgs args)
     {
-        SidikJari sj = new SidikJari(_currentImageFile.Path.ToString(), "");
+        // SidikJari sj = new SidikJari(_currentImageFile.Path.ToString(), "");
+        SidikJari sj = SidikJari.GetSidikJariIn32Pixel(_currentImageFile.Path.ToString());
         FingerSolution solution = _solver.Solve(sj);
         Nama.Text = solution.Biodata.Nama;
         NIK.Text = solution.Biodata.NIK;

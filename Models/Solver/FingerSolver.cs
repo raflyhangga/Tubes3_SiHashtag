@@ -60,8 +60,6 @@ public abstract class FingerSolver{
                 _smallestDistance = minResult;
                 result = biodata;
                 if(_smallestDistance == 0){
-                    System.Console.WriteLine("asw");
-                    System.Console.WriteLine(biodata.Nama);
                     return result;
                 }
             }
