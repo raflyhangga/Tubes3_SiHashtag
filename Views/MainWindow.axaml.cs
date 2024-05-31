@@ -13,13 +13,15 @@ namespace Tubes3_SiHashtag.Views;
 public partial class MainWindow : Window
 {
     // SolveAlgorithm _solveAlgorithm = SolveAlgorithm.BM;
-    FingerSolver _solver = new BMSolver();
+    FingerSolver _solver = new KMPSolver();
 
     IStorageFile _currentImageFile;
     public MainWindow()
     {
         Database.Initialize();
         InitializeComponent();
+        AlgorithmSwitch.Checked += ToggleSwitch_Checked;
+        AlgorithmSwitch.Unchecked += ToggleSwitch_Unchecked;
     }
 
     // string _imageSource = "/Assets/avalonia-logo.ico";
@@ -41,6 +43,19 @@ public partial class MainWindow : Window
             await using var stream = await files[0].OpenReadAsync();
             ImageDisplayerChoosen.Source = new Bitmap(stream);
         }
+    }
+
+    private void ToggleSwitch_Checked(object? sender, RoutedEventArgs e)
+    {
+        System.Console.WriteLine("Switching algorithms to KMP");
+        _solver = new KMPSolver();
+    }
+
+    private void ToggleSwitch_Unchecked(object? sender, RoutedEventArgs e)
+    {
+        System.Console.WriteLine("Toggle Switch is OFF");
+        System.Console.WriteLine("Switching algorithms to BM");
+        _solver = new BMSolver();
     }
 
     public void OnSearch(object sender, RoutedEventArgs args)
