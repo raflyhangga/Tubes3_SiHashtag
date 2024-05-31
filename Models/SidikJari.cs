@@ -48,7 +48,6 @@ public class SidikJari{
     // Return string representation of image by path
     public string ReadImageASCII(){
         _berkasCitra = cleanPrefix(_berkasCitra);
-        Console.WriteLine(_berkasCitra);
         Bitmap image = new Bitmap(_berkasCitra);
 
         string binaryStr = "";

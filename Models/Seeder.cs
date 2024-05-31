@@ -52,6 +52,9 @@ public class Seeder{
 
     public static void StartSeeding(string imageFolderPath){
         Database.Initialize();
+        MySqlDataReader reader = Database.Execute("ALTER TABLE sidik_jari ADD COLUMN ascii TEXT"); 
+
+
         string[] filePathList = Directory.GetFiles(imageFolderPath);
 
         Console.WriteLine("Seeding started...");
