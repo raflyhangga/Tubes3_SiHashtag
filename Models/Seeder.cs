@@ -53,7 +53,7 @@ public class Seeder{
     public static void StartSeeding(string imageFolderPath){
         Database.Initialize();
         MySqlDataReader reader = Database.Execute("ALTER TABLE sidik_jari ADD COLUMN ascii TEXT"); 
-
+        reader.Close();
 
         string[] filePathList = Directory.GetFiles(imageFolderPath);
 
@@ -116,7 +116,7 @@ public class Seeder{
         stopwatch.Restart();
         long count = (long) Math.Pow(10,15);
         foreach(SidikJari sj in sjList){
-            MySqlDataReader reader = Database.Execute("INSERT INTO sidik_jari (berkas_citra, nama, ascii) VALUES (@berkas_citra, @nama, @ascii)", 
+            reader = Database.Execute("INSERT INTO sidik_jari (berkas_citra, nama, ascii) VALUES (@berkas_citra, @nama, @ascii)", 
                 ("@berkas_citra", sj.BerkasCitra),
                 ("@nama", sj.Nama),
                 ("@ascii", sj.Ascii)
