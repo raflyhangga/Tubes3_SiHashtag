@@ -106,7 +106,6 @@ public class SidikJari{
         // Edge case if the image is too small
         if(binaryLength < 32){
             // Add everything until binaryLength but ensure it can be divided by 8
-            int remaining = 32 - binaryLength;
             for (int y = 0; y < image.Height; y++) {
                 for (int x = 0; x < image.Width; x++) {
                     Color pixelColor = image.GetPixel(x, y);
@@ -121,13 +120,13 @@ public class SidikJari{
                     }
                 }
             }
+            return ascii;
         }
 
 
         int middle = binaryLength / 2;
         int startingIndex = ((int)middle/8)*8 - 16;
         int endingIndex = startingIndex + 32;
-
 
         int firstY = startingIndex / image.Width;
         int firstX = startingIndex % image.Width;
@@ -137,6 +136,7 @@ public class SidikJari{
 
         int currentX = firstX;
         int currentY = firstY;
+
         do {
             Color pixelColor = image.GetPixel(currentX, currentY);
             double grayscale = (pixelColor.R * 0.299 + pixelColor.G * 0.587 + pixelColor.B * 0.114) / 255.0;
@@ -154,7 +154,7 @@ public class SidikJari{
                 currentX = 0;
                 currentY++;
             }
-        }while(currentX != lastX && currentY != lastY);
+        }while(currentX != lastX || currentY != lastY);
 
 
         // Dispose of the image

@@ -47,14 +47,11 @@ public partial class MainWindow : Window
 
     private void ToggleSwitch_Checked(object? sender, RoutedEventArgs e)
     {
-        System.Console.WriteLine("Switching algorithms to BM");
         _solver = new BMSolver();
     }
 
     private void ToggleSwitch_Unchecked(object? sender, RoutedEventArgs e)
     {
-        System.Console.WriteLine("Toggle Switch is OFF");
-        System.Console.WriteLine("Switching algorithms to KMP");
         _solver = new KMPSolver();
     }
 
@@ -75,7 +72,7 @@ public partial class MainWindow : Window
         Pekerjaan.Text = solution.Biodata.Pekerjaan;
         Kewarganegaraan.Text = solution.Biodata.Kewarganegaraan;
         
-        PersentaseKecocokan.Text = solution.PersentaseKecocokan.ToString() + "%";
+        PersentaseKecocokan.Text = (solution.PersentaseKecocokan*100).ToString() + "%";
         ExecutionTime.Text = solution.ExecutionTime.ToString() + " ms";
     }
 

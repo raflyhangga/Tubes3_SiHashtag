@@ -14,14 +14,17 @@ public class KMPSolver : FingerSolver{
 
         // Case not found
         if(result == null) {
-            //// TODO: LevenshteinDistance
-
             double percentage = 0;
+            int smallest = int.MaxValue;
             for(int i = 0; i < listSj.Count; i++) {
-                LevenshteinDistance.Solve("", "");
+                int res = LevenshteinDistance.Solve(sj.Ascii, listSj[i].Ascii);
+                if(smallest > res) {
+                    smallest = res;
+                    result = listSj[i];
+                    percentage = ((double)res) / (3*double.Max(sj.Ascii.Length, listSj[i].Ascii.Length));
+                }
             }
-            //// The above is unfinished yet
-            sol.PersentaseKecocokan = percentage;
+            sol.PersentaseKecocokan = 1-percentage;
         } else {
             sol.PersentaseKecocokan = 1;
         }
