@@ -103,7 +103,7 @@ public class Seeder{
             sjList[i] = sj;
 
             // below is not accurate because threading
-            if(++unsafeCounter % 1000 == 0) Console.WriteLine(unsafeCounter+" images seeded");
+            if(++unsafeCounter % 1000 == 0) Console.WriteLine(unsafeCounter+" images converted");
         });
         stopwatch.Stop();
         Console.WriteLine("Asscii conversion finished in "+stopwatch.ElapsedMilliseconds+" ms");
@@ -111,7 +111,7 @@ public class Seeder{
 
 
         stopwatch.Restart();
-        long count = (long) Math.Pow(10,16);
+        long count = (long) Math.Pow(10,15);
         foreach(SidikJari sj in sjList){
             MySqlDataReader reader = Database.Execute("INSERT INTO sidik_jari (berkas_citra, nama, ascii) VALUES (@berkas_citra, @nama, @ascii)", 
                 ("@berkas_citra", sj.BerkasCitra),
@@ -120,10 +120,11 @@ public class Seeder{
             );
             reader.Close();
 
-            reader = Database.Execute("INSERT INTO biodata (NIK, nama, tempat_lahir, jenis_kelamin, golongan_darah, alamat, agama, status_perkawinan, pekerjaan, kewarganegaraan) VALUES (@berkas_citra, @nama, @ascii)", 
-                ("@NIK", count++),
+            reader = Database.Execute("INSERT INTO biodata (NIK, nama, tempat_lahir, tanggal_lahir, jenis_kelamin, golongan_darah, alamat, agama, status_perkawinan, pekerjaan, kewarganegaraan) VALUES (@NIK, @nama, @tempat_lahir, @tanggal_lahir, @jenis_kelamin, @golongan_darah, @alamat, @agama, @status_perkawinan, @pekerjaan, @kewarganegaraan)", 
+                ("@NIK", (count++).ToString()),
                 ("@nama", sj.Nama), 
                 ("@tempat_lahir", "tempat_lahir"), 
+                ("@tanggal_lahir", new DateOnly()), 
                 ("@jenis_kelamin", Random.Shared.Choice("Laki-laki", "Perempuan")), 
                 ("@golongan_darah", "A"),
                 ("@alamat", "alamat"),
