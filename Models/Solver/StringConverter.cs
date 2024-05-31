@@ -5,14 +5,19 @@ using System.Text.RegularExpressions;
 
 public class StringConverter
 {
-    // private static Dictionary<string, string> _replacement_map = new Dictionary<string, string>
-    //     {
-    //         {"[aeiou]", string.Empty},
-    //         {@"\s+", String.Empty},
-    //         {"g", "6"},
-    //         {"e", "3"}
+    private static Dictionary<string, string> _replacement_map = new Dictionary<string, string>
+        {
+            {"g", "6"},
+            {"e", "3"},
+            {"i", "1"},
+            {"o", "0"},
+            {"s", "5"},
+            {"z", "2"},
+            {"a", "4"},
+            {@"\s+", String.Empty},
+            {"[aeiou]", string.Empty},
             
-    //     };
+        };
     public static string StringConvert(string input)
     {
         // Convert all uppercase to lowercase
@@ -25,5 +30,17 @@ public class StringConverter
         string finalString = Regex.Replace(noVowelsString, @"\s+", string.Empty);
 
         return finalString;
+    }
+
+    public static string AlayConvert(string input)
+    {
+        // Convert all uppercase to lowercase
+        string convertedString = input;
+        foreach (var dic in _replacement_map)
+        {
+            Regex.Replace(convertedString, dic.Key, dic.Value);
+        }
+
+        return convertedString;
     }
 }
