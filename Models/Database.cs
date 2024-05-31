@@ -38,5 +38,17 @@ public class Database{
         }
         return cmd.ExecuteReader();
     }
+
+    public static MySqlDataReader Execute(string query, params (string, string[])[] parameters) {
+        if(!_initialized) Initialize();
+        MySqlCommand cmd = new MySqlCommand(query, _connection);
+        foreach(var tuple in parameters){
+            foreach(string val in tuple.Item2){
+                cmd.Parameters.AddWithValue(tuple.Item1, val);
+            }
+        }
+        return cmd.ExecuteReader();
+    }
+
 }
 

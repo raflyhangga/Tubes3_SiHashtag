@@ -2,6 +2,8 @@ using System;
 using System.IO;
 using System.Collections.Generic;
 using MySql.Data.MySqlClient;
+using System.Threading.Tasks;
+using System.Diagnostics;
 
 public class Seeder{
     public static void PreprocessSidikjari() 
@@ -48,23 +50,67 @@ public class Seeder{
         }
     }
 
-
     public static void StartSeeding(string imageFolderPath){
-        Console.WriteLine("Seeding started...");
-
         Database.Initialize();
-
         string[] filePathList = Directory.GetFiles(imageFolderPath);
-        int progress = 0;
-        List<SidikJari> sjList = new List<SidikJari>(filePathList.Length);
-        foreach(string file in filePathList){
+
+        Console.WriteLine("Seeding started...");
+        Stopwatch stopwatch = new Stopwatch();
+        stopwatch.Start();
+
+
+
+        // Parallel version
+        // SidikJari[] sjList = new SidikJari[filePathList.Length];
+        // int unsafeCounter = 0;
+        // Parallel.For(0, filePathList.Length, i => {
+        //     string file = filePathList[i];
+        //     string name = Path.GetFileNameWithoutExtension(file);
+        //     SidikJari sj = new SidikJari(file, name);
+        //     sjList[i] = sj;
+
+        //     // below is not accurate because threading
+        //     if(++unsafeCounter % 1000 == 0) Console.WriteLine(unsafeCounter+" images converted");
+        // });
+        // stopwatch.Stop();
+        // Console.WriteLine("Seeding finished in "+stopwatch.ElapsedMilliseconds+" ms");
+
+
+
+        // Non parallel version
+        // List<SidikJari> sjList = new List<SidikJari>(filePathList.Length);
+        // int unsafeCounter = 0;
+        // foreach(string file in filePathList){
+        //     string name = Path.GetFileNameWithoutExtension(file);
+        //     SidikJari sj = new SidikJari(file, name);
+        //     sjList.Add(sj);
+
+        //     if(++unsafeCounter % 1000 == 0) Console.WriteLine(unsafeCounter+" images converted");         
+        // }
+        // stopwatch.Stop();
+        // Console.WriteLine("Seeding finished in "+stopwatch.ElapsedMilliseconds+" ms");
+
+
+
+        // Parallel version with max thread = 100
+        SidikJari[] sjList = new SidikJari[filePathList.Length];
+        int maxThread = 8000;
+        int unsafeCounter = 0;
+        Parallel.For(0, filePathList.Length, new ParallelOptions { MaxDegreeOfParallelism = maxThread }, i => {
+            string file = filePathList[i];
             string name = Path.GetFileNameWithoutExtension(file);
             SidikJari sj = new SidikJari(file, name);
-            sjList.Add(sj);
-            progress++;
-            if(progress % 1000 == 0) Console.WriteLine(progress+" images seeded");
-        }
+            sjList[i] = sj;
 
+            // below is not accurate because threading
+            if(++unsafeCounter % 1000 == 0) Console.WriteLine(unsafeCounter+" images seeded");
+        });
+        stopwatch.Stop();
+        Console.WriteLine("Asscii conversion finished in "+stopwatch.ElapsedMilliseconds+" ms");
+
+
+
+        stopwatch.Restart();
         long count = (long) Math.Pow(10,16);
         foreach(SidikJari sj in sjList){
             MySqlDataReader reader = Database.Execute("INSERT INTO sidik_jari (berkas_citra, nama, ascii) VALUES (@berkas_citra, @nama, @ascii)", 
@@ -72,23 +118,23 @@ public class Seeder{
                 ("@nama", sj.Nama),
                 ("@ascii", sj.Ascii)
             );
-
             reader.Close();
 
             reader = Database.Execute("INSERT INTO biodata (NIK, nama, tempat_lahir, jenis_kelamin, golongan_darah, alamat, agama, status_perkawinan, pekerjaan, kewarganegaraan) VALUES (@berkas_citra, @nama, @ascii)", 
-            ("@NIK", count++),
-            ("@nama", sj.Nama), 
-            ("@tempat_lahir", "tempat_lahir"), 
-            ("@jenis_kelamin", Random.Shared.Choice("Laki-laki", "Perempuan")), 
-            ("@golongan_darah", "A"),
-            ("@alamat", "alamat"),
-            ("@agama", "agama"), 
-            ("@status_perkawinan", Random.Shared.Choice("Belum menikah", "Menikah")),
-            ("@pekerjaan", "pekerjaan"), 
-            ("@kewarganegaraan", "kewarganegaraan")
+                ("@NIK", count++),
+                ("@nama", sj.Nama), 
+                ("@tempat_lahir", "tempat_lahir"), 
+                ("@jenis_kelamin", Random.Shared.Choice("Laki-laki", "Perempuan")), 
+                ("@golongan_darah", "A"),
+                ("@alamat", "alamat"),
+                ("@agama", "agama"), 
+                ("@status_perkawinan", Random.Shared.Choice("Belum menikah", "Menikah")),
+                ("@pekerjaan", "pekerjaan"), 
+                ("@kewarganegaraan", "kewarganegaraan")
             );
-
             reader.Close();
         }
+        stopwatch.Stop();
+        Console.WriteLine("Insert database finished in "+stopwatch.ElapsedMilliseconds+" ms");
     }
 }
