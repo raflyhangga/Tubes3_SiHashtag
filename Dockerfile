@@ -1,6 +1,7 @@
+FROM alpine:latest
+
 LABEL Name=finger
 
 WORKDIR /app
 
-COPY . .
-
+CMD ["echo","database started"]
