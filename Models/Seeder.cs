@@ -52,7 +52,7 @@ public class Seeder{
 
     public static void StartSeeding(string imageFolderPath){
         Database.Initialize();
-        MySqlDataReader reader = Database.Execute("ALTER TABLE sidik_jari ADD COLUMN ascii TEXT"); 
+        MySqlDataReader reader = Database.Execute("ALTER TABLE sidik_jari ADD COLUMN IF NOT EXISTS ascii TEXT"); 
         reader.Close();
 
         string[] filePathList = Directory.GetFiles(imageFolderPath);
