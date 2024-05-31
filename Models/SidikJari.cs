@@ -37,11 +37,18 @@ public class SidikJari{
             );
             list.Add(sidikJari);
         }
+        reader.Close();
         return list;
+    }
+
+    private string cleanPrefix(string path){
+        return path.Replace("file:///", "");
     }
 
     // Return string representation of image by path
     public string ReadImageASCII(){
+        _berkasCitra = cleanPrefix(_berkasCitra);
+        Console.WriteLine(_berkasCitra);
         Bitmap image = new Bitmap(_berkasCitra);
 
         string binaryStr = "";

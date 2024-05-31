@@ -49,6 +49,7 @@ public class Biodata{
             };
             list.Add(biodata);
         }
+        reader.Close();
         return list;
     }
 }

@@ -38,7 +38,16 @@ public abstract class FingerSolver{
     /// <param name="sj">The SidikJari found on database with ProcessCalculation</param>
     /// <returns></returns>
     private Biodata FindBiodata(SidikJari sj) {
-        //// TODO: regex bahasa alay
-        return null;
+        List<Biodata> biodataList = Biodata.GetAll();
+        Biodata result = null;
+        foreach(Biodata biodata in biodataList){
+            string bioName = StringConverter.StringConvert(biodata.Nama);
+            string sjName = StringConverter.StringConvert(sj.Nama);
+            if(bioName.Equals(sjName)){
+                result = biodata;
+                break;
+            }
+        }
+        return result;
     }
 }

@@ -43,7 +43,7 @@ public partial class MainWindow : Window
         }
     }
 
-    public async void OnSearch(object sender, RoutedEventArgs args)
+    public void OnSearch(object sender, RoutedEventArgs args)
     {
         SidikJari sj = new SidikJari(_currentImageFile.Path.ToString(), "");
         FingerSolution solution = _solver.Solve(sj);
