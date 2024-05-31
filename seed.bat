@@ -1,0 +1,1 @@
+dotnet run seed test/SOCOFing/Altered/Altered-Easy

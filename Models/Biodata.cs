@@ -33,18 +33,20 @@ public class Biodata{
         MySqlDataReader reader = Database.Execute("SELECT * FROM biodata");
         List<Biodata> list = new List<Biodata>();
         while(reader.Read()){
-            Biodata biodata = new Biodata();
-            biodata.nik = reader.GetString("NIK");
-            biodata.nama = reader.GetString("nama");
-            biodata.tempat_lahir = reader.GetString("tempat_lahir");
-            biodata.tanggal_lahir = reader.GetDateTime("tanggal_lahir");
-            biodata.jenis_kelamin = reader.GetString("jenis_kelamin");
-            biodata.golongan_darah = reader.GetString("golongan_darah");
-            biodata.alamat = reader.GetString("alamat");
-            biodata.agama = reader.GetString("agama");
-            biodata.status_perkawinan = reader.GetString("status_perkawinan");
-            biodata.pekerjaan = reader.GetString("pekerjaan");
-            biodata.kewarganegaraan = reader.GetString("kewarganegaraan");
+            Biodata biodata = new Biodata
+            {
+                nik = reader.GetString("NIK"),
+                nama = reader.GetString("nama"),
+                tempat_lahir = reader.GetString("tempat_lahir"),
+                tanggal_lahir = reader.GetDateTime("tanggal_lahir"),
+                jenis_kelamin = reader.GetString("jenis_kelamin"),
+                golongan_darah = reader.GetString("golongan_darah"),
+                alamat = reader.GetString("alamat"),
+                agama = reader.GetString("agama"),
+                status_perkawinan = reader.GetString("status_perkawinan"),
+                pekerjaan = reader.GetString("pekerjaan"),
+                kewarganegaraan = reader.GetString("kewarganegaraan")
+            };
             list.Add(biodata);
         }
         return list;

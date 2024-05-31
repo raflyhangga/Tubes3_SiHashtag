@@ -1,6 +1,7 @@
 using MySql.Data.MySqlClient;
 using DotNetEnv;
 using System;
+using System.Collections.Generic;
 
 public class Database{
     static MySqlConnection _connection;
@@ -27,6 +28,14 @@ public class Database{
     public static MySqlDataReader Execute(string query) {
         if(!_initialized) Initialize();
         MySqlCommand cmd = new MySqlCommand(query, _connection);
+        return cmd.ExecuteReader();
+    }
+    public static MySqlDataReader Execute(string query, List<Tuple<string,string>> parameters) {
+        if(!_initialized) Initialize();
+        MySqlCommand cmd = new MySqlCommand(query, _connection);
+        foreach(var tuple in parameters){
+            cmd.Parameters.AddWithValue(tuple.Item1, tuple.Item2);
+        }
         return cmd.ExecuteReader();
     }
 }

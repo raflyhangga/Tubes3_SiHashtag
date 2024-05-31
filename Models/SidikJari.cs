@@ -5,6 +5,7 @@ using System.Drawing;
 using System;
 
 public class SidikJari{
+    public const double THRESHOLD = 0.2;
     public string BerkasCitra => _berkasCitra;
     public string Nama => _nama;
     public string Ascii => _ascii; // generated later
@@ -13,9 +14,16 @@ public class SidikJari{
     string _nama;
     string _ascii;
 
-    public SidikJari(string berkas_citra, string nama){
-        this._berkasCitra = berkas_citra;
-        this._nama = nama;
+    public SidikJari(string berkasCitra, string nama){
+        _berkasCitra = berkasCitra;
+        _nama = nama;
+        _ascii = ReadImageASCII();
+    }
+
+    public SidikJari(string berkasCitra, string nama, string ascii){
+        _berkasCitra = berkasCitra;
+        _nama = nama;
+        _ascii = ascii;
     }
 
     public static List<SidikJari> GetAll(){
@@ -24,13 +32,15 @@ public class SidikJari{
         while(reader.Read()){
             SidikJari sidikJari = new SidikJari(
                 reader.GetString("berkas_citra"),
-                reader.GetString("nama")
+                reader.GetString("nama"),
+                reader.GetString("ascii")
             );
             list.Add(sidikJari);
         }
         return list;
     }
 
+    // Return string representation of image by path
     public string ReadImageASCII(){
         Bitmap image = new Bitmap(_berkasCitra);
 
@@ -40,7 +50,7 @@ public class SidikJari{
             for (int x = 0; x < image.Width; x++) {
                 Color pixelColor = image.GetPixel(x, y);
                 double grayscale = (pixelColor.R * 0.299 + pixelColor.G * 0.587 + pixelColor.B * 0.114) / 255.0;
-                int binaryValue = grayscale > 0.5 ? 1 : 0;
+                int binaryValue = grayscale > THRESHOLD ? 1 : 0;
                 binaryStr += binaryValue;
                 
                 if (binaryStr.Length == 8) {
@@ -84,5 +94,9 @@ public class SidikJari{
         // TODO: also save the ascii
         Database.Execute("INSERT INTO sidik_jari (berkas_citra, nama) VALUES ('"+_berkasCitra+"', '"+_nama+"')");
     }
+
+
+    
+
 
 }
