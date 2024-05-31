@@ -20,6 +20,16 @@ public class SidikJari{
         _ascii = ReadImageASCII();
     }
 
+    private SidikJari(string berkasCitra){
+        _berkasCitra = berkasCitra;
+        _nama = "";
+    }
+    public static SidikJari GetSidikJariIn32Pixel(string berkasCitra){
+        SidikJari sj = new SidikJari(berkasCitra);
+        sj._ascii = sj.ReadImageASCII32pixel();
+        return sj;
+    }
+
     public SidikJari(string berkasCitra, string nama, string ascii){
         _berkasCitra = berkasCitra;
         _nama = nama;
@@ -80,6 +90,76 @@ public class SidikJari{
 
         // Dispose of the image
         image.Dispose();
+        return ascii;
+    }
+
+
+    // Read only 32 middle binary
+    public string ReadImageASCII32pixel(){
+        _berkasCitra = cleanPrefix(_berkasCitra);
+        Bitmap image = new Bitmap(_berkasCitra);
+
+        string binaryStr = "";
+        string ascii = "";
+
+        int binaryLength = image.Height * image.Width;
+        // Edge case if the image is too small
+        if(binaryLength < 32){
+            // Add everything until binaryLength but ensure it can be divided by 8
+            int remaining = 32 - binaryLength;
+            for (int y = 0; y < image.Height; y++) {
+                for (int x = 0; x < image.Width; x++) {
+                    Color pixelColor = image.GetPixel(x, y);
+                    double grayscale = (pixelColor.R * 0.299 + pixelColor.G * 0.587 + pixelColor.B * 0.114) / 255.0;
+                    int binaryValue = grayscale > THRESHOLD ? 1 : 0;
+                    binaryStr += binaryValue;
+                    
+                    if (binaryStr.Length == 8) {
+                        byte binaryByte = Convert.ToByte(binaryStr, 2);
+                        ascii += (char)binaryByte;
+                        binaryStr = "";
+                    }
+                }
+            }
+        }
+
+
+        int middle = binaryLength / 2;
+        int startingIndex = ((int)middle/8)*8 - 16;
+        int endingIndex = startingIndex + 32;
+
+
+        int firstY = startingIndex / image.Width;
+        int firstX = startingIndex % image.Width;
+
+        int lastY = endingIndex / image.Width;
+        int lastX = endingIndex % image.Width;
+
+        int currentX = firstX;
+        int currentY = firstY;
+        do {
+            Color pixelColor = image.GetPixel(currentX, currentY);
+            double grayscale = (pixelColor.R * 0.299 + pixelColor.G * 0.587 + pixelColor.B * 0.114) / 255.0;
+            int binaryValue = grayscale > THRESHOLD ? 1 : 0;
+            binaryStr += binaryValue;
+            
+            if (binaryStr.Length == 8) {
+                byte binaryByte = Convert.ToByte(binaryStr, 2);
+                ascii += (char)binaryByte;
+                binaryStr = "";
+            }
+
+            currentX++;
+            if(currentX == image.Width){
+                currentX = 0;
+                currentY++;
+            }
+        }while(currentX != lastX && currentY != lastY);
+
+
+        // Dispose of the image
+        image.Dispose();
+
         return ascii;
     }
 

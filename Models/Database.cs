@@ -50,5 +50,12 @@ public class Database{
         return cmd.ExecuteReader();
     }
 
+
+    public static void Execute(string fullQuery, MySqlParameter[] parameters){
+        var cmd = new MySqlCommand(fullQuery.ToString(), _connection);
+        cmd.Parameters.AddRange(parameters);
+        cmd.ExecuteNonQuery();
+    }
+
 }
 

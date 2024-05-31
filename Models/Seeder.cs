@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using MySql.Data.MySqlClient;
 using System.Threading.Tasks;
 using System.Diagnostics;
+using System.Text;
 
 public class Seeder{
     public static void PreprocessSidikjari() 
@@ -115,6 +116,7 @@ public class Seeder{
 
         stopwatch.Restart();
         long count = (long) Math.Pow(10,15);
+        // Cannot bulk insert because of max_allowed_packet
         foreach(SidikJari sj in sjList){
             reader = Database.Execute("INSERT INTO sidik_jari (berkas_citra, nama, ascii) VALUES (@berkas_citra, @nama, @ascii)", 
                 ("@berkas_citra", sj.BerkasCitra),
@@ -138,6 +140,90 @@ public class Seeder{
             );
             reader.Close();
         }
+
+
+        // Manual version
+        // MySqlConnection _connection = null;
+        // foreach(SidikJari sj in sjList){
+        //     MySqlCommand cmd = new MySqlCommand("INSERT INTO sidik_jari (berkas_citra, nama, ascii) VALUES (@berkas_citra, @nama, @ascii)", _connection);
+        //     cmd.Parameters.AddWithValue("@berkas_citra", sj.BerkasCitra);
+        //     cmd.Parameters.AddWithValue("@nama", sj.Nama);
+        //     cmd.Parameters.AddWithValue("@ascii", sj.Ascii);
+        //     reader = cmd.ExecuteReader();
+        //     reader.Close();
+
+        //     cmd = new MySqlCommand("INSERT INTO biodata (NIK, nama, tempat_lahir, tanggal_lahir, jenis_kelamin, golongan_darah, alamat, agama, status_perkawinan, pekerjaan, kewarganegaraan) VALUES (@NIK, @nama, @tempat_lahir, @tanggal_lahir, @jenis_kelamin, @golongan_darah, @alamat, @agama, @status_perkawinan, @pekerjaan, @kewarganegaraan)", _connection);
+        //     cmd.Parameters.AddWithValue("@NIK", (count++).ToString());
+        //     cmd.Parameters.AddWithValue("@nama", sj.Nama);
+        //     cmd.Parameters.AddWithValue("@tempat_lahir", "tempat_lahir");
+        //     cmd.Parameters.AddWithValue("@tanggal_lahir", new DateOnly());
+        //     cmd.Parameters.AddWithValue("@jenis_kelamin", Random.Shared.Choice("Laki-laki", "Perempuan"));
+        //     cmd.Parameters.AddWithValue("@golongan_darah", "A");
+        //     cmd.Parameters.AddWithValue("@alamat", "alamat");
+        //     cmd.Parameters.AddWithValue("@agama", "agama");
+        //     cmd.Parameters.AddWithValue("@status_perkawinan", Random.Shared.Choice("Belum menikah", "Menikah"));
+        //     cmd.Parameters.AddWithValue("@pekerjaan", "pekerjaan");
+        //     cmd.Parameters.AddWithValue("@kewarganegaraan", "kewarganegaraan");
+        //     reader = cmd.ExecuteReader();
+        //     reader.Close();
+        // }
+
+
+
+        // Bulk edit version. Not possible because Packets larger than max_allowed_packet
+        // stopwatch.Restart();
+        // long count = (long) Math.Pow(10,15);
+        // var sidikJariQuery = new StringBuilder();
+        // var biodataQuery = new StringBuilder();
+        // var parameters = new List<MySqlParameter>();
+
+        // int paramIndex = 0;
+
+        // foreach(SidikJari sj in sjList)
+        // {
+        //     // Append to the sidik_jari query with parameters
+        //     sidikJariQuery.AppendLine($"INSERT INTO sidik_jari (berkas_citra, nama, ascii) VALUES (@berkas_citra{paramIndex}, @nama{paramIndex}, @ascii{paramIndex});");
+        //     parameters.AddRange(new[]
+        //     {
+        //         new MySqlParameter($"@berkas_citra{paramIndex}", sj.BerkasCitra),
+        //         new MySqlParameter($"@nama{paramIndex}", sj.Nama),
+        //         new MySqlParameter($"@ascii{paramIndex}", sj.Ascii)
+        //     });
+
+        //     // Append to the biodata query with parameters
+        //     var NIK = (count++).ToString();
+        //     var tempat_lahir = "tempat_lahir";
+        //     var tanggal_lahir = DateTime.Now.ToString("yyyy-MM-dd"); // Assuming you want today's date for demo purposes
+        //     var jenis_kelamin = new Random().Next(0, 2) == 0 ? "Laki-laki" : "Perempuan"; // Randomly choose gender
+        //     var golongan_darah = "A";
+        //     var alamat = "alamat";
+        //     var agama = "agama";
+        //     var status_perkawinan = new Random().Next(0, 2) == 0 ? "Belum menikah" : "Menikah"; // Randomly choose status
+        //     var pekerjaan = "pekerjaan";
+        //     var kewarganegaraan = "kewarganegaraan";
+
+        //     biodataQuery.AppendLine($"INSERT INTO biodata (NIK, nama, tempat_lahir, tanggal_lahir, jenis_kelamin, golongan_darah, alamat, agama, status_perkawinan, pekerjaan, kewarganegaraan) VALUES (@NIK{paramIndex}, @nama_b{paramIndex}, @tempat_lahir{paramIndex}, @tanggal_lahir{paramIndex}, @jenis_kelamin{paramIndex}, @golongan_darah{paramIndex}, @alamat{paramIndex}, @agama{paramIndex}, @status_perkawinan{paramIndex}, @pekerjaan{paramIndex}, @kewarganegaraan{paramIndex});");
+        //     parameters.AddRange(new[]
+        //     {
+        //         new MySqlParameter($"@NIK{paramIndex}", NIK),
+        //         new MySqlParameter($"@nama_b{paramIndex}", sj.Nama),
+        //         new MySqlParameter($"@tempat_lahir{paramIndex}", tempat_lahir),
+        //         new MySqlParameter($"@tanggal_lahir{paramIndex}", tanggal_lahir),
+        //         new MySqlParameter($"@jenis_kelamin{paramIndex}", jenis_kelamin),
+        //         new MySqlParameter($"@golongan_darah{paramIndex}", golongan_darah),
+        //         new MySqlParameter($"@alamat{paramIndex}", alamat),
+        //         new MySqlParameter($"@agama{paramIndex}", agama),
+        //         new MySqlParameter($"@status_perkawinan{paramIndex}", status_perkawinan),
+        //         new MySqlParameter($"@pekerjaan{paramIndex}", pekerjaan),
+        //         new MySqlParameter($"@kewarganegaraan{paramIndex}", kewarganegaraan)
+        //     });
+
+        //     paramIndex++;
+        // }
+
+        // Database.Execute(sidikJariQuery.ToString(), parameters.ToArray());
+        // Database.Execute(biodataQuery.ToString(), parameters.ToArray());
+
         stopwatch.Stop();
         Console.WriteLine("Insert database finished in "+stopwatch.ElapsedMilliseconds+" ms");
     }
