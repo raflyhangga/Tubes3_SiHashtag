@@ -19,6 +19,7 @@ public partial class MainWindow : Window
     public MainWindow()
     {
         Database.Initialize();
+        FingerSolver.Initialize();
         InitializeComponent();
         AlgorithmSwitch.Checked += ToggleSwitch_Checked;
         AlgorithmSwitch.Unchecked += ToggleSwitch_Unchecked;

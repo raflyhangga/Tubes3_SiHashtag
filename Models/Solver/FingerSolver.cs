@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 public abstract class FingerSolver{
 
@@ -10,10 +11,30 @@ public abstract class FingerSolver{
     /// <returns>FingerSolution</returns>
     public FingerSolution Solve(SidikJari sj){
         FingerSolution sol = new FingerSolution().StartTimer();
-        ProcessCalculation(sj, GetAllSidikJari(), ref sol);
+        ProcessCalculation(sj, AllSidikJari, ref sol);
+        if(sol.SidikJari != null) sol.PersentaseKecocokan = 1;
+        else SolveWithLevenstheinDistance(AllSidikJari, ref sol);
+
         Biodata biodata = FindBiodata(sol.SidikJari);
         sol.Biodata = biodata;
         return sol.StopTimer();
+    }
+
+
+    // Case not found
+    void SolveWithLevenstheinDistance(List<SidikJari> listSj, ref FingerSolution sol){
+        SidikJari sj = sol.SidikJari;
+        double percentage = 0;
+        int smallest = int.MaxValue;
+        for(int i = 0; i < listSj.Count; i++) {
+            int res = LevenshteinDistance.Solve(sj.Ascii, listSj[i].Ascii);
+            if(smallest > res) {
+                smallest = res;
+                sol.SidikJari = listSj[i];
+                percentage = ((double)res) / double.Max(sj.Ascii.Length, listSj[i].Ascii.Length);
+            }
+        }
+        sol.PersentaseKecocokan = 1-percentage;
     }
 
     /// <summary>
@@ -28,9 +49,9 @@ public abstract class FingerSolver{
     /// return all sidik jari
     /// </summary>
     /// <returns></returns>
-    private List<SidikJari> GetAllSidikJari(){
-        return SidikJari.GetAll();;
-    }
+    private static List<SidikJari> cachedSidikJariList = null;
+    private static List<SidikJari> AllSidikJari => cachedSidikJariList ?? (cachedSidikJariList = SidikJari.GetAll()); 
+    public static void Initialize() => cachedSidikJariList = SidikJari.GetAll(); 
 
     /// <summary>
     /// Find user data with regex because of bahasa alay stuff

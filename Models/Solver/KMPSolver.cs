@@ -11,24 +11,6 @@ public class KMPSolver : FingerSolver{
                 break;
             }
         }
-
-        // Case not found
-        if(result == null) {
-            double percentage = 0;
-            int smallest = int.MaxValue;
-            for(int i = 0; i < listSj.Count; i++) {
-                int res = LevenshteinDistance.Solve(sj.Ascii, listSj[i].Ascii);
-                if(smallest > res) {
-                    smallest = res;
-                    result = listSj[i];
-                    percentage = ((double)res) / (3*double.Max(sj.Ascii.Length, listSj[i].Ascii.Length));
-                }
-            }
-            sol.PersentaseKecocokan = 1-percentage;
-        } else {
-            sol.PersentaseKecocokan = 1;
-        }
-
         sol.SidikJari = result;
     }
 
