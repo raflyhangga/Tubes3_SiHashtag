@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
 
-public class StringConverter
+public static class StringConverter
 {
     private static Dictionary<string, string> _replacement_map = new Dictionary<string, string>
         {
@@ -13,7 +13,7 @@ public class StringConverter
             {"[aeiou4013]", "\0"},
             {@"\s+", "\0"},
         };
-    public static string StringConvert(string input)
+    public static string FormatToAlay(this string input)
     {
         // Convert all uppercase to lowercase
         string convertedString = input.ToLower();

@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Text;
 
 public class Seeder{
+
     public static void PreprocessSidikjari() 
     {
         Console.WriteLine("Before:");
@@ -117,17 +118,23 @@ public class Seeder{
         stopwatch.Restart();
         long count = (long) Math.Pow(10,15);
         // Cannot bulk insert because of max_allowed_packet
+
+        Stack<string> allNames = getCopyOfAllNames();
         foreach(SidikJari sj in sjList){
+            string name;
+            if(allNames.Count != 0) name = allNames.Pop();
+            else name = sj.Nama;
+
             reader = Database.Execute("INSERT INTO sidik_jari (berkas_citra, nama, ascii) VALUES (@berkas_citra, @nama, @ascii)", 
                 ("@berkas_citra", sj.BerkasCitra),
-                ("@nama", sj.Nama),
+                ("@nama", name),
                 ("@ascii", sj.Ascii)
             );
             reader.Close();
 
             reader = Database.Execute("INSERT INTO biodata (NIK, nama, tempat_lahir, tanggal_lahir, jenis_kelamin, golongan_darah, alamat, agama, status_perkawinan, pekerjaan, kewarganegaraan) VALUES (@NIK, @nama, @tempat_lahir, @tanggal_lahir, @jenis_kelamin, @golongan_darah, @alamat, @agama, @status_perkawinan, @pekerjaan, @kewarganegaraan)", 
                 ("@NIK", (count++).ToString()),
-                ("@nama", sj.Nama), 
+                ("@nama", Random.Shared.NextDouble() >= 0.5 ? name : name.FormatToAlay()), 
                 ("@tempat_lahir", "tempat_lahir"), 
                 ("@tanggal_lahir", new DateOnly()), 
                 ("@jenis_kelamin", Random.Shared.Choice("Laki-laki", "Perempuan")), 
@@ -226,5 +233,15 @@ public class Seeder{
 
         stopwatch.Stop();
         Console.WriteLine("Insert database finished in "+stopwatch.ElapsedMilliseconds+" ms");
+    }
+
+    
+    
+    static Stack<string> getCopyOfAllNames(){
+        Stack<string> copy = new Stack<string>();
+        for(int i = 0; i < IndonesianNames.Names.Length; i++){
+            copy.Push(IndonesianNames.Names[i]);
+        }
+        return copy;
     }
 }

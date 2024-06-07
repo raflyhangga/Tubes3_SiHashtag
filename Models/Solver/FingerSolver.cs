@@ -14,9 +14,7 @@ public abstract class FingerSolver{
         ProcessCalculation(sj, AllSidikJari, ref sol);
         if(sol.SidikJari != null) sol.PersentaseKecocokan = 1;
         else SolveWithLevenstheinDistance(AllSidikJari, ref sol);
-
-        Biodata biodata = FindBiodata(sol.SidikJari);
-        sol.Biodata = biodata;
+        sol.Biodata = FindBiodata(sol.SidikJari);
         return sol.StopTimer();
     }
 
@@ -64,8 +62,8 @@ public abstract class FingerSolver{
         double _smallestDistance = double.MaxValue;
         foreach(Biodata biodata in biodataList){
 
-            string bioName = StringConverter.StringConvert(biodata.Nama);
-            string sjName = StringConverter.StringConvert(sj.Nama);
+            string bioName = biodata.Nama.FormatToAlay();
+            string sjName = sj.Nama.FormatToAlay();
             
             // pure string compute
             double pureLevenshteinDistance = LevenshteinDistance.Solve(biodata.Nama, sj.Nama);
