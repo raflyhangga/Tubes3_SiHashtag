@@ -61,20 +61,22 @@ public partial class MainWindow : Window
         // SidikJari sj = new SidikJari(_currentImageFile.Path.ToString(), "");
         SidikJari sj = SidikJari.GetSidikJariIn32Pixel(_currentImageFile.Path.ToString());
         FingerSolution solution = _solver.Solve(sj);
-        Nama.Text = solution.Biodata.Nama;
-        NIK.Text = solution.Biodata.NIK;
-        TempatLahir.Text = solution.Biodata.TempatLahir;
-        TanggalLahir.Text = solution.Biodata.TanggalLahir.ToString();
-        JenisKelamin.Text = solution.Biodata.JenisKelamin;
-        GolonganDarah.Text = solution.Biodata.GolonganDarah;
-        Alamat.Text = solution.Biodata.Alamat;
-        Agama.Text = solution.Biodata.Agama;
-        StatusPerkawinan.Text = solution.Biodata.StatusPerkawinan;
-        Pekerjaan.Text = solution.Biodata.Pekerjaan;
-        Kewarganegaraan.Text = solution.Biodata.Kewarganegaraan;
+        Nama.Text = "Nama: " + solution.Biodata.Nama;
+        NIK.Text = "NIK: " + solution.Biodata.NIK;
+        TempatLahir.Text = "Tempat Lahir: " + solution.Biodata.TempatLahir;
+        TanggalLahir.Text = "Tanggal Lahir: " + solution.Biodata.TanggalLahir.ToString();
+        JenisKelamin.Text = "Jenis Kelamin: " + solution.Biodata.JenisKelamin;
+        GolonganDarah.Text = "Golongan Darah: " + solution.Biodata.GolonganDarah;
+        Alamat.Text = "Alamat: " + solution.Biodata.Alamat;
+        Agama.Text = "Agama: " + solution.Biodata.Agama;
+        StatusPerkawinan.Text = "Status Perkawinan: " + solution.Biodata.StatusPerkawinan;
+        Pekerjaan.Text = "Pekerjaan: " + solution.Biodata.Pekerjaan;
+        Kewarganegaraan.Text = "Kewarganegaraan: " + solution.Biodata.Kewarganegaraan;
         
         PersentaseKecocokan.Text = (solution.PersentaseKecocokan*100).ToString() + "%";
         ExecutionTime.Text = solution.ExecutionTime.ToString() + " ms";
+
+        ImageDisplayerChoosen.Source = new Bitmap(solution.SidikJari.BerkasCitra);
     }
 
     public void OnSetKMP(object sender, RoutedEventArgs args)

@@ -6,7 +6,9 @@ using System;
 
 public class SidikJari{
     public const double THRESHOLD = 0.2;
+    // Path to image file
     public string BerkasCitra => _berkasCitra;
+    
     public string Nama => _nama;
     public string Ascii => _ascii; // generated later
 
