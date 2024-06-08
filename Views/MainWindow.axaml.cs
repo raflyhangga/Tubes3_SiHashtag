@@ -62,10 +62,10 @@ public partial class MainWindow : Window
     public void OnSearch(object sender, RoutedEventArgs args)
     {
         if(_currentImageFile == null) return;
-        
-        // SidikJari sj = new SidikJari(_currentImageFile.Path.ToString(), "");
-        SidikJari sj = SidikJari.GetSidikJariIn32Pixel(_currentImageFile.Path.ToString());
-        FingerSolution solution = _solver.Solve(sj);
+        FingerSolution solution = _solver.Solve(
+            SidikJari.GetSidikJariIn32Pixel(_currentImageFile.Path.ToString()),
+            SidikJari.GetSidikJariFull(_currentImageFile.Path.ToString())
+        );
         Nama.Text = "Nama: " + solution.Biodata.Nama;
         NIK.Text = "NIK: " + solution.Biodata.NIK;
         TempatLahir.Text = "Tempat Lahir: " + solution.Biodata.TempatLahir;

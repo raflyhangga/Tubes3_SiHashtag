@@ -32,6 +32,12 @@ public class SidikJari{
         return sj;
     }
 
+    public static SidikJari GetSidikJariFull(string berkasCitra){
+        SidikJari sj = new SidikJari(berkasCitra);
+        sj._ascii = sj.ReadImageASCII();
+        return sj;
+    }
+
     public SidikJari(string berkasCitra, string nama, string ascii){
         _berkasCitra = berkasCitra;
         _nama = nama;
