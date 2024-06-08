@@ -61,7 +61,6 @@ public class Seeder{
 
         stopwatch.Restart();
         counter = 0;
-        Database.ExecuteNonQuery("TRUNCATE TABLE sidik_jari"); // insert is faster than update where
         foreach(SidikJari sj in sjList){
             Database.ExecuteNonQuery("INSERT INTO sidik_jari (berkas_citra, nama, ascii) VALUES (@berkas_citra, @nama, @ascii)", 
                 ("@berkas_citra", sj.BerkasCitra),
@@ -94,8 +93,10 @@ public class Seeder{
 
     public static void StartSeeding(string imageFolderPath){
         Database.Initialize();
-        MySqlDataReader reader = Database.Execute("ALTER TABLE sidik_jari ADD COLUMN IF NOT EXISTS ascii TEXT"); 
-        reader.Close();
+        Database.ExecuteNonQuery("ALTER TABLE sidik_jari ADD COLUMN IF NOT EXISTS ascii TEXT"); 
+        Database.ExecuteNonQuery("TRUNCATE TABLE biodata");
+        Database.ExecuteNonQuery("TRUNCATE TABLE sidik_jari");
+
 
         string[] filePathList = Directory.GetFiles(imageFolderPath);
 
@@ -284,5 +285,40 @@ public class Seeder{
             copy.Push(IndonesianNames.Names[i]);
         }
         return copy;
+    }
+
+
+    public static void TestAllAscii(){
+        Database.Initialize();
+        Database.ExecuteNonQuery("CREATE TABLE IF NOT EXISTS test (value TEXT)");
+        
+        string value = "";
+        for(int i = 0; i < 256; i++) value += (char)i;
+
+        Database.ExecuteNonQuery("INSERT INTO test (value) VALUES(@value)", ("@value", value));
+
+        MySqlDataReader reader = Database.Execute("SELECT * FROM test");
+        reader.Read();
+        string valToCheck = reader.GetString("value");
+        if(valToCheck != value) {
+            Console.WriteLine("Kok beda banhhh");
+            Console.WriteLine(valToCheck);
+            Console.WriteLine(value);
+            Console.WriteLine();
+            
+            for(int i = 0; i < value.Length; i++){
+                if(value[i] != valToCheck[i]){
+                    Console.WriteLine("beda di "+i);
+                    Console.WriteLine(value[i] + ": " + (int)value[i]);
+                    Console.WriteLine(valToCheck[i] + ": " + (int)valToCheck[i]);
+                    break;
+                }
+            }
+        } else {
+            Console.WriteLine("yeay sama");
+        }
+        reader.Close();
+
+        Database.ExecuteNonQuery("DROP TABLE test");
     }
 }

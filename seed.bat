@@ -1,1 +1,1 @@
-dotnet run seed test/SOCOFing/Altered/Altered-Easy
+dotnet run seed test/SOCOFing/Real
