@@ -24,7 +24,7 @@ public class BMSolver : FingerSolver{
             lastOc[(int)pat[i]] = i;
     }
 
-    static int BMSearch(string txt, string pat)
+    static int BMSearch(string pat, string txt)
     {
         int n = txt.Length;
         int m = pat.Length;
@@ -34,12 +34,13 @@ public class BMSolver : FingerSolver{
         LastOccurenceCalculation(pat, lastOc);
 
         int i = m - 1;
-        while (i <= (n - m)) {
-            int j = m - 1;
+        int j = m - 1;
+        while (i <= n - 1) {
 
             if(txt[i] == pat[j]){
-                if(j == 0)
+                if(j == 0){
                     return i;
+                }
                 else{
                     i--;
                     j--;
