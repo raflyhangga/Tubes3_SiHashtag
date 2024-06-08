@@ -95,6 +95,10 @@ public class SidikJari{
         return ascii;
     }
 
+    public void PopulateImageAscii(){
+        _ascii = ReadImageASCII();
+    }
+
 
     // Read only 32 middle binary
     public string ReadImageASCII32pixel(){

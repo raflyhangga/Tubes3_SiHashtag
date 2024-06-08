@@ -45,7 +45,7 @@ public partial class MainWindow : Window
             ImageDisplayerChoosen.Source = new Bitmap(stream);
             
             ChoosenImageLabel.Text = "Choosen Image:\n"+files[0].Name.ToString();
-            ChoosenImageText.Text = files[0].Path.ToString();
+            ChoosenImageText.Text = "Source:\n"+files[0].Path.ToString();
         }
     }
 

@@ -12,7 +12,7 @@ sealed class Program
     [STAThread]
     public static void Main(string[] args) {
         if(args.Length == 1 && args[0] == "preprocess") Seeder.PreprocessSidikjari();
-        if(args.Length == 1 && args[0] == "check") Seeder.CheckDatabaseContent();
+        else if(args.Length == 1 && args[0] == "check") Seeder.CheckDatabaseContent();
         else if(args.Length == 2 && args[0] == "seed") Seeder.StartSeeding(args[1]);
         else if(args.Length == 0) BuildAvaloniaApp().StartWithClassicDesktopLifetime(args);
         else {

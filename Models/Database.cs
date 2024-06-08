@@ -30,6 +30,11 @@ public class Database{
         MySqlCommand cmd = new MySqlCommand(query, _connection);
         return cmd.ExecuteReader();
     }
+    public static MySqlCommand ExecuteCommand(string query) {
+        if(!_initialized) Initialize();
+        MySqlCommand cmd = new MySqlCommand(query, _connection);
+        return cmd;
+    }
     public static MySqlDataReader Execute(string query, params (string, object)[] parameters) {
         if(!_initialized) Initialize();
         MySqlCommand cmd = new MySqlCommand(query, _connection);
@@ -37,6 +42,15 @@ public class Database{
             cmd.Parameters.AddWithValue(tuple.Item1, tuple.Item2);
         }
         return cmd.ExecuteReader();
+    }
+
+    public static int ExecuteNonQuery(string query, params (string, object)[] parameters) {
+        if(!_initialized) Initialize();
+        MySqlCommand cmd = new MySqlCommand(query, _connection);
+        foreach(var tuple in parameters){
+            cmd.Parameters.AddWithValue(tuple.Item1, tuple.Item2);
+        }
+        return cmd.ExecuteNonQuery();
     }
 
     public static MySqlDataReader Execute(string query, params (string, string[])[] parameters) {

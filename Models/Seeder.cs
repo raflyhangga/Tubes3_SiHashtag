@@ -14,27 +14,67 @@ public class Seeder{
         CheckDatabaseContent();
 
 
-        Console.WriteLine("Preprocess started...");
         Database.Initialize();
-        MySqlDataReader reader = Database.Execute("SELECT * FROM sidik_jari");
-        List<Tuple<int,SidikJari>> sjList = new List<Tuple<int,SidikJari>>();
-        while(reader.Read()){
-            SidikJari sidikJari = new SidikJari(
-                reader.GetString("berkas_citra"),
-                reader.GetString("nama")
-            );
-            int id = reader.GetInt32("id");
-            sjList.Add(new Tuple<int,SidikJari>(id,sidikJari));
-        }
+
+        Console.WriteLine("Preprocess started...");
+
+        MySqlDataReader reader = Database.Execute("ALTER TABLE sidik_jari ADD COLUMN IF NOT EXISTS ascii TEXT"); 
         reader.Close();
 
-        foreach(Tuple<int,SidikJari> tuple in sjList){
-            int id = tuple.Item1;
-            SidikJari sj = tuple.Item2;
-            Database.Execute("UPDATE sidik_jari SET ascii = '"+sj.Ascii+"' WHERE id = "+id);
+        // Non parallel version
+        // reader = Database.Execute("SELECT * FROM sidik_jari");
+        // List<SidikJari> sjList = new List<SidikJari>();
+        // while(reader.Read()){
+        //     SidikJari sidikJari = new SidikJari(
+        //         reader.GetString("berkas_citra"),
+        //         reader.GetString("nama")
+        //     );
+        //     sjList.Add(sidikJari);
+        // }
+        // reader.Close();
+
+        // foreach(Tuple<int,SidikJari> tuple in sjList){
+        //     int id = tuple.Item1;
+        //     SidikJari sj = tuple.Item2;
+        //     Database.Execute("UPDATE sidik_jari SET ascii = '"+sj.Ascii+"' WHERE id = "+id);
+        // }
+
+        // Parallel version. Not allowed
+        // List<SidikJari> sjList = SidikJari.GetAll();
+        // Parallel.ForEach(sjList, new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount }, sj => {
+        //     MySqlCommand cmd = Database.ExecuteCommand("UPDATE sidik_jari SET ascii = '"+sj.ReadImageASCII()+"' WHERE nama = "+sj.Nama);
+        //     cmd.ExecuteNonQuery();
+        // });
+
+
+        Stopwatch stopwatch = new Stopwatch();
+        stopwatch.Start();
+        List<SidikJari> sjList = SidikJari.GetAll();
+        int counter = 0;
+        Parallel.ForEach(sjList, new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount }, sj => {
+            sj.PopulateImageAscii();
+            if(++counter % 1000 == 0) Console.WriteLine(counter+" images converted");
+        });
+        stopwatch.Stop();
+        Console.WriteLine("Ascii conversion finished in "+stopwatch.ElapsedMilliseconds+" ms");
+
+
+        stopwatch.Restart();
+        counter = 0;
+        Database.ExecuteNonQuery("TRUNCATE TABLE sidik_jari"); // insert is faster than update where
+        foreach(SidikJari sj in sjList){
+            Database.ExecuteNonQuery("INSERT INTO sidik_jari (berkas_citra, nama, ascii) VALUES (@berkas_citra, @nama, @ascii)", 
+                ("@berkas_citra", sj.BerkasCitra),
+                ("@nama", sj.Nama),
+                ("@ascii", sj.Ascii)
+            );
+            if(++counter % 1000 == 0) Console.WriteLine(counter+" ascii inserted");
         }
+        stopwatch.Stop();
+        Console.WriteLine("Database update finished in "+stopwatch.ElapsedMilliseconds+" ms");
         
         Console.WriteLine("Preprocess Finished!");
+
 
         
         Console.WriteLine("After:");
@@ -43,7 +83,7 @@ public class Seeder{
 
     public static void CheckDatabaseContent(){
         List<SidikJari> list = SidikJari.GetAll();
-        int max = Math.Min(5, list.Count);
+        int max = Math.Min(3, list.Count);
         for(int i = 0; i < max; i++){
             Console.WriteLine("==== "+i+" ====");
             Console.WriteLine(list[i].Nama);
@@ -97,9 +137,9 @@ public class Seeder{
 
 
 
-        // Parallel version with max thread = 100
+        // Parallel version with max thread = amount of processor
         SidikJari[] sjList = new SidikJari[filePathList.Length];
-        int maxThread = 8000;
+        int maxThread = Environment.ProcessorCount;
         int unsafeCounter = 0;
         Parallel.For(0, filePathList.Length, new ParallelOptions { MaxDegreeOfParallelism = maxThread }, i => {
             string file = filePathList[i];
@@ -120,19 +160,19 @@ public class Seeder{
         // Cannot bulk insert because of max_allowed_packet
 
         Stack<string> allNames = getCopyOfAllNames();
+        unsafeCounter = 0;
         foreach(SidikJari sj in sjList){
             string name;
             if(allNames.Count != 0) name = allNames.Pop();
             else name = sj.Nama;
 
-            reader = Database.Execute("INSERT INTO sidik_jari (berkas_citra, nama, ascii) VALUES (@berkas_citra, @nama, @ascii)", 
+            Database.ExecuteNonQuery("INSERT INTO sidik_jari (berkas_citra, nama, ascii) VALUES (@berkas_citra, @nama, @ascii)", 
                 ("@berkas_citra", sj.BerkasCitra),
                 ("@nama", name),
                 ("@ascii", sj.Ascii)
             );
-            reader.Close();
 
-            reader = Database.Execute("INSERT INTO biodata (NIK, nama, tempat_lahir, tanggal_lahir, jenis_kelamin, golongan_darah, alamat, agama, status_perkawinan, pekerjaan, kewarganegaraan) VALUES (@NIK, @nama, @tempat_lahir, @tanggal_lahir, @jenis_kelamin, @golongan_darah, @alamat, @agama, @status_perkawinan, @pekerjaan, @kewarganegaraan)", 
+            Database.ExecuteNonQuery("INSERT INTO biodata (NIK, nama, tempat_lahir, tanggal_lahir, jenis_kelamin, golongan_darah, alamat, agama, status_perkawinan, pekerjaan, kewarganegaraan) VALUES (@NIK, @nama, @tempat_lahir, @tanggal_lahir, @jenis_kelamin, @golongan_darah, @alamat, @agama, @status_perkawinan, @pekerjaan, @kewarganegaraan)", 
                 ("@NIK", (count++).ToString()),
                 ("@nama", Random.Shared.NextDouble() >= 0.5 ? name : name.FormatToAlay()), 
                 ("@tempat_lahir", "tempat_lahir"), 
@@ -145,7 +185,8 @@ public class Seeder{
                 ("@pekerjaan", "pekerjaan"), 
                 ("@kewarganegaraan", "kewarganegaraan")
             );
-            reader.Close();
+
+            if(++unsafeCounter % 1000 == 0) Console.WriteLine(unsafeCounter+" images inserted");
         }
 
 
