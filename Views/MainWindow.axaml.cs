@@ -43,6 +43,9 @@ public partial class MainWindow : Window
             _currentImageFile = files[0];
             await using var stream = await files[0].OpenReadAsync();
             ImageDisplayerChoosen.Source = new Bitmap(stream);
+            
+            ChoosenImageLabel.Text = "Choosen Image:\n"+files[0].Name.ToString();
+            ChoosenImageText.Text = files[0].Path.ToString();
         }
     }
 
@@ -58,6 +61,8 @@ public partial class MainWindow : Window
 
     public void OnSearch(object sender, RoutedEventArgs args)
     {
+        if(_currentImageFile == null) return;
+        
         // SidikJari sj = new SidikJari(_currentImageFile.Path.ToString(), "");
         SidikJari sj = SidikJari.GetSidikJariIn32Pixel(_currentImageFile.Path.ToString());
         FingerSolution solution = _solver.Solve(sj);

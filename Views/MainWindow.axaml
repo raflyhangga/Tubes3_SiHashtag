@@ -42,12 +42,14 @@
             </Grid>
         </Border>
 
-        <Border Margin="20" Grid.Row="1" Grid.Column="0">
-            <Button Click="OnImagePickerClicked" Foreground="White" Background="Indigo" CornerRadius="10">Pilih Citra</Button>
-        </Border>
+        <Grid Margin="20" Grid.Row="1" Grid.Column="0" ColumnDefinitions="*" RowDefinitions="*,*,*">
+            <Button Padding="20,10" FontWeight="700" Click="OnImagePickerClicked" Grid.Row="0" Grid.Column="0" Foreground="White" Background="#2563eb" CornerRadius="10">Pilih Citra</Button>
+            <TextBlock x:Name="ChoosenImageLabel" Grid.Row="1" Grid.Column="0" Text="" Foreground="White"/>
+            <TextBlock x:Name="ChoosenImageText" Grid.Row="2" Grid.Column="0" Text="" Foreground="White"/>
+        </Grid>
 
         <Grid Grid.Row="1" Grid.Column="1" ColumnDefinitions="*" RowDefinitions="*,*" Margin="20">
-            <Button Grid.Row="0" Grid.Column="0" Click="OnSearch" Foreground="White" Background="Indigo" CornerRadius="10">Search</Button>
+            <Button Padding="20,10" FontWeight="700" Grid.Row="0" Grid.Column="0" Click="OnSearch" Foreground="White" Background="#2563eb" CornerRadius="10">Search</Button>
             <ToggleSwitch Grid.Row="1" Grid.Column="0" Name="AlgorithmSwitch" Content="Algorithm" OffContent="KMP" OnContent="BM" IsChecked="False"/>
         </Grid>
 

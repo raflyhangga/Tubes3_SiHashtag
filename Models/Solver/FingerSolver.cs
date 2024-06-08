@@ -21,7 +21,6 @@ public abstract class FingerSolver{
 
     // Case not found
     void SolveWithLevenstheinDistance(SidikJari sj, List<SidikJari> listSj, ref FingerSolution sol){
-        Console.WriteLine();
         double percentage = 0;
         int smallest = int.MaxValue;
         for(int i = 0; i < listSj.Count; i++) {

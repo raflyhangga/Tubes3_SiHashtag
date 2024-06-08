@@ -13,6 +13,7 @@
         <FluentTheme />
     </Application.Styles>
 	<Application.Resources>
-		<FontFamily x:Key="NunitoFont">avares://GoogleFonts/Assets/Fonts#Nunito</FontFamily>
+		<FontFamily x:Key="NunitoFont">avares:///Tubes3_SiHashtag/Assets/font/Outfit-Bold.ttf#Outfit</FontFamily>
+		<FontFamily x:Key="OutfitFont">avares://GoogleFonts/Assets/Fonts#Outfit</FontFamily>
 	</Application.Resources>
 </Application>
