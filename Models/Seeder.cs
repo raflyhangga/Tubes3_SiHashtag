@@ -159,13 +159,20 @@ public class Seeder{
         stopwatch.Restart();
         long count = (long) Math.Pow(10,15);
         // Cannot bulk insert because of max_allowed_packet
-
-        Stack<string> allNames = getCopyOfAllNames();
+        Reader rdr = new TextReader();
+        Stack<string> allNames = getCopyOfAllNames(rdr);
+        Stack<string> allAddress = getCopyOfAllAddress(rdr);
+        string[] countries = rdr.getContentList("Assets/country.txt");
         unsafeCounter = 0;
         foreach(SidikJari sj in sjList){
-            string name;
-            if(allNames.Count != 0) name = allNames.Pop();
-            else name = sj.Nama;
+            string name = (allNames.Count != 0)? allNames.Pop() : sj.Nama;
+            string address = (allAddress.Count != 0)? allAddress.Pop() : "Twobagoes Esmail";
+            string jenis_kelamin = (string)Random.Shared.Choice("Laki-laki", "Perempuan");
+            string gol_darah = (string)Random.Shared.Choice("A+","A-","B+","B-","O+","O-","AB+","AB-");
+            string agama = (string)Random.Shared.Choice("Islam","Kristen","Protestan","Hindu","Buddha");
+            string status_menikah = (string)Random.Shared.Choice("Belum menikah", "Menikah");
+            string pekerjaan = (string)Random.Shared.Choice("Tidak Bekerja", "Manager","Consultant","Software Engineer");
+            string country = (string)Random.Shared.Choice(countries);
 
             Database.ExecuteNonQuery("INSERT INTO sidik_jari (berkas_citra, nama, ascii) VALUES (@berkas_citra, @nama, @ascii)", 
                 ("@berkas_citra", sj.BerkasCitra),
@@ -176,15 +183,15 @@ public class Seeder{
             Database.ExecuteNonQuery("INSERT INTO biodata (NIK, nama, tempat_lahir, tanggal_lahir, jenis_kelamin, golongan_darah, alamat, agama, status_perkawinan, pekerjaan, kewarganegaraan) VALUES (@NIK, @nama, @tempat_lahir, @tanggal_lahir, @jenis_kelamin, @golongan_darah, @alamat, @agama, @status_perkawinan, @pekerjaan, @kewarganegaraan)", 
                 ("@NIK", (count++).ToString()),
                 ("@nama", name), 
-                ("@tempat_lahir", "tempat_lahir"), 
+                ("@tempat_lahir", country), 
                 ("@tanggal_lahir", new DateOnly()), 
-                ("@jenis_kelamin", Random.Shared.Choice("Laki-laki", "Perempuan")), 
-                ("@golongan_darah", "A"),
-                ("@alamat", "alamat"),
-                ("@agama", "agama"), 
-                ("@status_perkawinan", Random.Shared.Choice("Belum menikah", "Menikah")),
-                ("@pekerjaan", "pekerjaan"), 
-                ("@kewarganegaraan", "kewarganegaraan")
+                ("@jenis_kelamin", jenis_kelamin), 
+                ("@golongan_darah", gol_darah),
+                ("@alamat", address),
+                ("@agama", agama), 
+                ("@status_perkawinan", status_menikah),
+                ("@pekerjaan", pekerjaan), 
+                ("@kewarganegaraan", country)
             );
 
             if(++unsafeCounter % 1000 == 0) Console.WriteLine(unsafeCounter+" images inserted");
@@ -279,10 +286,20 @@ public class Seeder{
 
     
     
-    static Stack<string> getCopyOfAllNames(){
-        Stack<string> copy = new Stack<string>();
-        for(int i = 0; i < IndonesianNames.Names.Length; i++){
-            copy.Push(IndonesianNames.Names[i]);
+    static Stack<string> getCopyOfAllNames(Reader rdr){
+        Stack<string> copy = new();
+        string[] temp = rdr.getContentList("Assets/nama.txt");
+        foreach(string str in temp) {
+            copy.Push(str);
+        }
+        return copy;
+    }
+
+    static Stack<string> getCopyOfAllAddress(Reader rdr){
+        Stack<string> copy = new();
+        string[] temp = rdr.getContentList("Assets/alamat.txt");
+        foreach(string str in temp) {
+            copy.Push(str);
         }
         return copy;
     }
