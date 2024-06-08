@@ -92,11 +92,11 @@ public abstract class FingerSolver{
             
             // pure string compute
             double pureLevenshteinDistance = LevenshteinDistance.Solve(biodata.Nama, sj.Nama);
-            double pureNormalized = pureLevenshteinDistance/(3*double.Max(biodata.Nama.Length, sj.Nama.Length));
+            double pureNormalized = pureLevenshteinDistance/double.Max(biodata.Nama.Length, sj.Nama.Length);
 
             // corrupted + pure string compute
             double corruptedLevenshteinDistance = LevenshteinDistance.Solve(bioName, sjName);
-            double corruptedNormalized = (corruptedLevenshteinDistance/(3*double.Max(bioName.Length, sjName.Length)) + pureNormalized) / 2;
+            double corruptedNormalized = (corruptedLevenshteinDistance/double.Max(bioName.Length, sjName.Length) + pureNormalized) / 2;
 
             // result
             double minResult = double.Min(pureLevenshteinDistance, corruptedNormalized);
