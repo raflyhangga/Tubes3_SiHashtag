@@ -7,21 +7,21 @@ public abstract class FingerSolver{
     /// <summary>
     /// Return the solution depending on the algorithm in FingerSolution
     /// </summary>
-    /// <param name="sj">Input from user</param>
+    /// <param name="sjInput">Input from user</param>
     /// <returns>FingerSolution</returns>
-    public FingerSolution Solve(SidikJari sj){
+    public FingerSolution Solve(SidikJari sjInput){
         FingerSolution sol = new FingerSolution().StartTimer();
-        ProcessCalculation(sj, AllSidikJari, ref sol);
+        ProcessCalculation(sjInput, AllSidikJari, ref sol);
         if(sol.SidikJari != null) sol.PersentaseKecocokan = 1;
-        else SolveWithLevenstheinDistance(AllSidikJari, ref sol);
+        else SolveWithLevenstheinDistance(sjInput, AllSidikJari, ref sol);
         sol.Biodata = FindBiodata(sol.SidikJari);
         return sol.StopTimer();
     }
 
 
     // Case not found
-    void SolveWithLevenstheinDistance(List<SidikJari> listSj, ref FingerSolution sol){
-        SidikJari sj = sol.SidikJari;
+    void SolveWithLevenstheinDistance(SidikJari sj, List<SidikJari> listSj, ref FingerSolution sol){
+        Console.WriteLine();
         double percentage = 0;
         int smallest = int.MaxValue;
         for(int i = 0; i < listSj.Count; i++) {

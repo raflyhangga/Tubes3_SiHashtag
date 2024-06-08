@@ -88,4 +88,6 @@ public class KMPSolver : FingerSolver{
             }
         }
     }
+
+    public override string ToString() => "KMP";
 }

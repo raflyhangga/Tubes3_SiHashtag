@@ -52,4 +52,7 @@ public class BMSolver : FingerSolver{
         }
         return -1;
     }
+
+    public override string ToString() => "BM";
+
 }
