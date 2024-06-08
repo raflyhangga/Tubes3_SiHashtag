@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 public abstract class FingerSolver{
@@ -13,7 +14,9 @@ public abstract class FingerSolver{
         FingerSolution sol = new FingerSolution().StartTimer();
         ProcessCalculation(sjInput, AllSidikJari, ref sol);
         if(sol.SidikJari != null) sol.PersentaseKecocokan = 1;
-        else SolveWithLevenstheinDistance(sjInput, AllSidikJari, ref sol);
+        // else SolveWithLevenstheinDistance(new SidikJari(sjInput.BerkasCitra, sjInput.Nama), AllSidikJari, ref sol); // case all pixel
+        else SolveWithLevenstheinDistance(sjInput, AllSidikJari, ref sol); // case only 32 pixel
+        
         sol.Biodata = FindBiodata(sol.SidikJari);
         return sol.StopTimer();
     }
@@ -23,14 +26,37 @@ public abstract class FingerSolver{
     void SolveWithLevenstheinDistance(SidikJari sj, List<SidikJari> listSj, ref FingerSolution sol){
         double percentage = 0;
         int smallest = int.MaxValue;
+        // for(int i = 0; i < listSj.Count; i++) {
+        //     int res = LevenshteinDistance.Solve(sj.Ascii, listSj[i].Ascii);
+        //     if(smallest > res) {
+        //         smallest = res;
+        //         sol.SidikJari = listSj[i];
+        //         percentage = ((double)res) / double.Max(sj.Ascii.Length, listSj[i].Ascii.Length);
+        //     }
+
+        //     // Debug
+        //     if(++i % 1000 == 0) Console.WriteLine("LevenshteinDistance: " + i + " / " + listSj.Count);
+        // }
+
+        // Paralel version
+        int unsafeCounter = 0;
+        int[] distances = new int[listSj.Count];
+        Parallel.For(0, listSj.Count, new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount }, i => {
+            distances[i] = LevenshteinDistance.Solve(sj.Ascii, listSj[i].Ascii);
+            if(++unsafeCounter % 1000 == 0) Console.WriteLine("LevenshteinDistance: " + unsafeCounter + " / " + listSj.Count);
+        });
+
         for(int i = 0; i < listSj.Count; i++) {
-            int res = LevenshteinDistance.Solve(sj.Ascii, listSj[i].Ascii);
-            if(smallest > res) {
-                smallest = res;
+            if(distances[i] < smallest) {
+                smallest = distances[i];
                 sol.SidikJari = listSj[i];
-                percentage = ((double)res) / double.Max(sj.Ascii.Length, listSj[i].Ascii.Length);
+                // percentage = ((double)distances[i]) / double.Max(sj.Ascii.Length, listSj[i].Ascii.Length); // case all pixel
+                double bigger = double.Max(sj.Ascii.Length, listSj[i].Ascii.Length);
+                double minPossibleValue = bigger - 32;
+                percentage = Mathf.InverseLerp(minPossibleValue, bigger, smallest);
             }
         }
+
         sol.PersentaseKecocokan = 1-percentage;
     }
 
