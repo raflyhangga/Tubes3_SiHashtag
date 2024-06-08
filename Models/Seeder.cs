@@ -175,7 +175,7 @@ public class Seeder{
 
             Database.ExecuteNonQuery("INSERT INTO biodata (NIK, nama, tempat_lahir, tanggal_lahir, jenis_kelamin, golongan_darah, alamat, agama, status_perkawinan, pekerjaan, kewarganegaraan) VALUES (@NIK, @nama, @tempat_lahir, @tanggal_lahir, @jenis_kelamin, @golongan_darah, @alamat, @agama, @status_perkawinan, @pekerjaan, @kewarganegaraan)", 
                 ("@NIK", (count++).ToString()),
-                ("@nama", Random.Shared.NextDouble() >= 0.5 ? name : name.FormatToAlay()), 
+                ("@nama", Random.Shared.NextDouble() >= 0.5 ? name : name.ToAlay()), 
                 ("@tempat_lahir", "tempat_lahir"), 
                 ("@tanggal_lahir", new DateOnly()), 
                 ("@jenis_kelamin", Random.Shared.Choice("Laki-laki", "Perempuan")), 

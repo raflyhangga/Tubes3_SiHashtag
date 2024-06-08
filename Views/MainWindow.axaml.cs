@@ -79,7 +79,10 @@ public partial class MainWindow : Window
         Kewarganegaraan.Text = "Kewarganegaraan: " + solution.Biodata.Kewarganegaraan;
 
         // For debugging
-        Algoritma.Text = "Algoritma: " + _solver.ToString();
+        if(solution.PersentaseKecocokan == 1)
+            Algoritma.Text = "Algoritma: " + _solver.ToString();
+        else
+            Algoritma.Text = "Algoritma: Levenshtein Distance";
         
         PersentaseKecocokan.Text = (solution.PersentaseKecocokan*100).ToString() + "%";
         ExecutionTime.Text = solution.ExecutionTime.ToString() + " ms";

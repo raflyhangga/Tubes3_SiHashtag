@@ -87,8 +87,8 @@ public abstract class FingerSolver{
         double _smallestDistance = double.MaxValue;
         foreach(Biodata biodata in biodataList){
 
-            string bioName = biodata.Nama.FormatToAlay();
-            string sjName = sj.Nama.FormatToAlay();
+            string bioName = biodata.Nama.ToCompareAlay();
+            string sjName = sj.Nama.ToCompareAlay();
             
             // pure string compute
             double pureLevenshteinDistance = LevenshteinDistance.Solve(biodata.Nama, sj.Nama);
