@@ -52,8 +52,8 @@ public abstract class FingerSolver{
                 sol.SidikJari = listSj[i];
                 // percentage = ((double)distances[i]) / double.Max(sj.Ascii.Length, listSj[i].Ascii.Length); // case all pixel
                 double bigger = double.Max(sj.Ascii.Length, listSj[i].Ascii.Length);
-                double minPossibleValue = bigger - 32;
-                percentage = Mathf.InverseLerp(minPossibleValue, bigger, smallest);
+                double smaller = double.Min(sj.Ascii.Length, listSj[i].Ascii.Length);
+                percentage = Mathf.InverseLerp(bigger - smaller, bigger, smallest);
             }
         }
 
