@@ -72,11 +72,14 @@ public partial class MainWindow : Window
         StatusPerkawinan.Text = "Status Perkawinan: " + solution.Biodata.StatusPerkawinan;
         Pekerjaan.Text = "Pekerjaan: " + solution.Biodata.Pekerjaan;
         Kewarganegaraan.Text = "Kewarganegaraan: " + solution.Biodata.Kewarganegaraan;
+
+        // For debugging
+        Algoritma.Text = "Algoritma: " + _solver.ToString();
         
         PersentaseKecocokan.Text = (solution.PersentaseKecocokan*100).ToString() + "%";
         ExecutionTime.Text = solution.ExecutionTime.ToString() + " ms";
 
-        ImageDisplayerChoosen.Source = new Bitmap(solution.SidikJari.BerkasCitra);
+        ImageDisplayerResult.Source = new Bitmap(solution.SidikJari.BerkasCitra);
     }
 
     public void OnSetKMP(object sender, RoutedEventArgs args)

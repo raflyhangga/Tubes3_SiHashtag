@@ -26,7 +26,7 @@
         </Border>
 
         <Border Grid.Row="0" Grid.Column="2" Margin="20" Background="#0f172a" CornerRadius="20">
-            <Grid ColumnDefinitions="*" RowDefinitions="*,*,*,*,*,*,*,*,*,*,*" Margin="20">
+            <Grid ColumnDefinitions="*" RowDefinitions="*,*,*,*,*,*,*,*,*,*,*,*" Margin="20">
                 <TextBlock x:Name="Nama" Text="Nama: " Grid.Row="0" Grid.Column="0" Foreground="White"/>
                 <TextBlock x:Name="NIK" Text="NIK: " Grid.Row="1" Grid.Column="0" Foreground="White"/>
                 <TextBlock x:Name="TempatLahir" Text="Tempat Lahir: " Grid.Row="2" Grid.Column="0" Foreground="White"/>
@@ -38,11 +38,14 @@
                 <TextBlock x:Name="StatusPerkawinan" Text="Status Perkawinan: " Grid.Row="8" Grid.Column="0" Foreground="White"/>
                 <TextBlock x:Name="Pekerjaan" Text="Pekerjaan: " Grid.Row="9" Grid.Column="0" Foreground="White"/>
                 <TextBlock x:Name="Kewarganegaraan" Text="Kewarganegaraan: " Grid.Row="10" Grid.Column="0" Foreground="White"/>
+                <TextBlock x:Name="Algoritma" Text="Algoritma: " Grid.Row="11" Grid.Column="0" Foreground="White"/>
             </Grid>
         </Border>
 
-        <Button Grid.Row="1" Grid.Column="0" Click="OnImagePickerClicked" Foreground="White" Background="Indigo" CornerRadius="10">Pilih Citra</Button>
-        
+        <Border Margin="20" Grid.Row="1" Grid.Column="0">
+            <Button Click="OnImagePickerClicked" Foreground="White" Background="Indigo" CornerRadius="10">Pilih Citra</Button>
+        </Border>
+
         <Grid Grid.Row="1" Grid.Column="1" ColumnDefinitions="*" RowDefinitions="*,*" Margin="20">
             <Button Grid.Row="0" Grid.Column="0" Click="OnSearch" Foreground="White" Background="Indigo" CornerRadius="10">Search</Button>
             <ToggleSwitch Grid.Row="1" Grid.Column="0" Name="AlgorithmSwitch" Content="Algorithm" OffContent="KMP" OnContent="BM" IsChecked="False"/>

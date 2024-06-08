@@ -11,21 +11,6 @@ public class BMSolver : FingerSolver{
                 break;
             }
         }
-
-        // Case not found
-        if(result == null) {
-            //// TODO: LevenshteinDistance
-
-            double percentage = 0;
-            for(int i = 0; i < listSj.Count; i++) {
-                LevenshteinDistance.Solve("", "");
-            }
-            //// The above is unfinished yet
-            sol.PersentaseKecocokan = percentage;
-        } else {
-            sol.PersentaseKecocokan = 1;
-        }
-
         sol.SidikJari = result;
     }
  
@@ -98,4 +83,7 @@ public class BMSolver : FingerSolver{
         }
         return -1;
     }
+
+    public override string ToString() => "BM";
+
 }
