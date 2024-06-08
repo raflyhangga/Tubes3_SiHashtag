@@ -300,6 +300,7 @@ public class Seeder{
         MySqlDataReader reader = Database.Execute("SELECT * FROM test");
         reader.Read();
         string valToCheck = reader.GetString("value");
+        reader.Close();
         if(valToCheck != value) {
             Console.WriteLine("Kok beda banhhh");
             Console.WriteLine(valToCheck);
@@ -317,7 +318,6 @@ public class Seeder{
         } else {
             Console.WriteLine("yeay sama");
         }
-        reader.Close();
 
         Database.ExecuteNonQuery("DROP TABLE test");
     }
