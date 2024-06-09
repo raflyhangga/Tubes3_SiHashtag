@@ -5,6 +5,7 @@ using System.Drawing;
 using System;
 
 public class SidikJari{
+    const int CHOSEN_PIXEL_SIZE = 256;
     public const double THRESHOLD = 0.2;
     // Path to image file
     public string BerkasCitra => _berkasCitra;
@@ -26,9 +27,9 @@ public class SidikJari{
         _berkasCitra = berkasCitra;
         _nama = "";
     }
-    public static SidikJari GetSidikJariIn32Pixel(string berkasCitra){
+    public static SidikJari GetSidikJariInChosenPixelSize(string berkasCitra){
         SidikJari sj = new SidikJari(berkasCitra);
-        sj._ascii = sj.ReadImageASCII32pixel();
+        sj._ascii = sj.ReadImageASCIIChosenPixelSize();
         return sj;
     }
 
@@ -106,8 +107,8 @@ public class SidikJari{
     }
 
 
-    // Read only 32 middle binary
-    public string ReadImageASCII32pixel(){
+    // Read only CHOSEN_PIXEL_SIZE middle binary
+    public string ReadImageASCIIChosenPixelSize(){
         _berkasCitra = cleanPrefix(_berkasCitra);
         Bitmap image = new Bitmap(_berkasCitra);
 
@@ -115,8 +116,12 @@ public class SidikJari{
         string ascii = "";
 
         int binaryLength = image.Height * image.Width;
+
+
+        int midPoint = image.Width*(image.Height/2) + image.Width/2;
+
         // Edge case if the image is too small
-        if(binaryLength < 32){
+        if(binaryLength < CHOSEN_PIXEL_SIZE){
             // Add everything until binaryLength but ensure it can be divided by 8
             for (int y = 0; y < image.Height; y++) {
                 for (int x = 0; x < image.Width; x++) {
@@ -136,9 +141,9 @@ public class SidikJari{
         }
 
 
-        int middle = binaryLength / 2;
-        int startingIndex = ((int)middle/8)*8 - 16;
-        int endingIndex = startingIndex + 32;
+        int middle = midPoint;
+        int startingIndex = ((int)middle/8)*8 - CHOSEN_PIXEL_SIZE/2;
+        int endingIndex = startingIndex + CHOSEN_PIXEL_SIZE;
 
         int firstY = startingIndex / image.Width;
         int firstX = startingIndex % image.Width;

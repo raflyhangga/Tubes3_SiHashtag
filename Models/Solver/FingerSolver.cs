@@ -12,9 +12,11 @@ public abstract class FingerSolver{
     /// <returns>FingerSolution</returns>
     public FingerSolution Solve(SidikJari sjInput){
         FingerSolution sol = new FingerSolution().StartTimer();
-        ProcessCalculation(sjInput, AllSidikJari, ref sol);
+        ProcessCalculation(sjInput, AllSidikJari, ref sol); // case CHOSEN_PIXEL_SIZE pixel
+        // ProcessCalculation(new SidikJari(sjInput.BerkasCitra, sjInput.Nama), AllSidikJari, ref sol); // case all pixel
         if(sol.SidikJari != null) sol.PersentaseKecocokan = 1;
         else SolveWithLevenstheinDistance(new SidikJari(sjInput.BerkasCitra, sjInput.Nama), AllSidikJari, ref sol);
+        // else SolveWithLevenstheinDistance(sjInput, AllSidikJari, ref sol); // case 32 pixel
         
         sol.Biodata = FindBiodata(sol.SidikJari);
         return sol.StopTimer();

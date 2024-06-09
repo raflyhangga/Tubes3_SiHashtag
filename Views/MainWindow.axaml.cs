@@ -63,7 +63,7 @@ public partial class MainWindow : Window
     {
         if(_currentImageFile == null) return;
         FingerSolution solution = _solver.Solve(
-            SidikJari.GetSidikJariIn32Pixel(_currentImageFile.Path.ToString())
+            SidikJari.GetSidikJariInChosenPixelSize(_currentImageFile.Path.ToString())
         );
         Nama.Text = "Nama: " + solution.Biodata.Nama;
         NIK.Text = "NIK: " + solution.Biodata.NIK;
