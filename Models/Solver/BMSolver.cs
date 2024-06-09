@@ -14,7 +14,7 @@ public class BMSolver : FingerSolver{
         sol.SidikJari = result;
     }
  
-    // last Occurence table preprocessing
+    // Last Occurence table preprocessing
     static void LastOccurenceCalculation(string pat, int[] lastOc)
     {
         int size = pat.Length;
@@ -29,7 +29,7 @@ public class BMSolver : FingerSolver{
         int n = txt.Length;
         int m = pat.Length;
 
-        // preprocessing pattern
+        // Preprocessing pattern
         int[] lastOc = new int[256];
         LastOccurenceCalculation(pat, lastOc);
 
@@ -46,7 +46,7 @@ public class BMSolver : FingerSolver{
                     j--;
                 }
             } else{
-                // lookup to last occurence table
+                // Lookup to last occurence table
                 i = i + m - int.Min(j, 1 + lastOc[(int)txt[i]]); 
                 j = m - 1;
             }
