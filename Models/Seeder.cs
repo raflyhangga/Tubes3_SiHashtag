@@ -173,21 +173,25 @@ public class Seeder{
         string valToCheck = reader.GetString("value");
         reader.Close();
         if(valToCheck != value) {
-            Console.WriteLine("Kok beda banhhh");
-            Console.WriteLine(valToCheck);
-            Console.WriteLine(value);
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine("Failed. Please use another MariaDB/MySQL version or use docker.");
+            Console.WriteLine("Value after database SELECT statement: " + valToCheck);
+            Console.WriteLine("Hardcoded value: " + value);
             Console.WriteLine();
             
             for(int i = 0; i < value.Length; i++){
                 if(value[i] != valToCheck[i]){
-                    Console.WriteLine("beda di "+i);
+                    Console.WriteLine("Different value at index "+i);
                     Console.WriteLine(value[i] + ": " + (int)value[i]);
                     Console.WriteLine(valToCheck[i] + ": " + (int)valToCheck[i]);
                     break;
                 }
             }
+            Console.ResetColor();
         } else {
-            Console.WriteLine("yeay sama");
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine("Passed, you can use this MariaDB/MySQL version.");
+            Console.ResetColor();
         }
 
         Database.ExecuteNonQuery("DROP TABLE test");
