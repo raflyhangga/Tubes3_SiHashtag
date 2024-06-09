@@ -179,27 +179,4 @@ public class SidikJari{
 
         return ascii;
     }
-
-
-    public static void SaveAllImagesInPathToDatabase(string path){
-        string[] files = Directory.GetFiles(path);
-        foreach(string file in files){
-            SidikJari sj = new SidikJari(
-                Path.Join(path, file),
-                file
-            );
-            // TODO: generate ascii before saving
-            sj.Save();
-        }
-    }
-
-    public void Save(){
-        // TODO: also save the ascii
-        Database.Execute("INSERT INTO sidik_jari (berkas_citra, nama) VALUES ('"+_berkasCitra+"', '"+_nama+"')");
-    }
-
-
-    
-
-
 }

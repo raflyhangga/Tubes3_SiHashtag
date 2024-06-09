@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 public abstract class FingerSolver{
 
@@ -25,17 +24,6 @@ public abstract class FingerSolver{
     void SolveWithLevenstheinDistance(SidikJari sj, List<SidikJari> listSj, ref FingerSolution sol){
         double percentage = 0;
         int smallest = int.MaxValue;
-        // for(int i = 0; i < listSj.Count; i++) {
-        //     int res = LevenshteinDistance.Solve(sj.Ascii, listSj[i].Ascii);
-        //     if(smallest > res) {
-        //         smallest = res;
-        //         sol.SidikJari = listSj[i];
-        //         percentage = ((double)res) / double.Max(sj.Ascii.Length, listSj[i].Ascii.Length);
-        //     }
-
-        //     // Debug
-        //     if(++i % 1000 == 0) Console.WriteLine("LevenshteinDistance: " + i + " / " + listSj.Count);
-        // }
 
         // Paralel version
         int unsafeCounter = 0;

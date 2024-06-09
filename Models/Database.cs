@@ -1,7 +1,6 @@
 using MySql.Data.MySqlClient;
 using DotNetEnv;
 using System;
-using System.Collections.Generic;
 
 public class Database{
     static MySqlConnection _connection;
