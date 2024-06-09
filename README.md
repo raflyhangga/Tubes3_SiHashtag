@@ -37,7 +37,7 @@ for example
 docker exec -i 4b4d7661eb39 mariadb -u root -ppassword tubes3_stima24 < Assets/dump/tubes3_stima24.sql
 ```
 The `-ppassword` is correct without any space.
-If using MariaDB and the dump is MySQL, replace every `utf8mb4_0900_ai_ci` with `utf8mb4_general_ci`
+If using MariaDB and the dump is MySQL, replace every `utf8mb4_0900_ai_ci` with `utf8mb4_general_ci` in the dump
 
 To get the Container Id, run the following statement.
 ```
