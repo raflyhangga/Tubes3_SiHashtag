@@ -364,6 +364,7 @@ src/Browser/Avalonia.Browser/staticwebassets
 
 # test folder
 test/*
+!test/.keep
 
 # dump folder
 dump/
