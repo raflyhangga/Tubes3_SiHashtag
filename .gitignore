@@ -363,7 +363,7 @@ src/Browser/Avalonia.Browser/staticwebassets
 .env
 
 # test folder
-test/
+test/*
 
 # dump folder
 dump/
