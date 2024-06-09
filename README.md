@@ -1,6 +1,11 @@
 # Tubes3_SiHashtag
 Tugas pemenuhan TUBES STIMA
 
+## Anggota Kelompok
+- 13522014, Raden Rafly Hanggaraksa Budiarto 
+- 13522084, Dhafin Fawwaz Ikramullah 
+- 13522107, Rayendra Althaf Taraka Noor 
+
 ## Warning!
 Please beware that some MySQL or MariaDB version is not compatible with this project. Tested MariaDB version is 11.3.2-MariaDB-1:11.3.2+maria~ubu2204. To make sure its compatible, please use docker and follow the steps below. Or if you want to test on your own, try running `dotnet run testascii` and see if its passed.
 
