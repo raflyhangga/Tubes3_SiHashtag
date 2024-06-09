@@ -88,4 +88,4 @@ docker exec 4b4d7661eb39 mariadb-dump -u root -ppassword tubes3_stima24 > Assets
 | `dotnet run seed` | Start seeding |
 | `dotnet run testascii` | Check if MariaDB/MySQL version is compatible |
 | `dotnet run` | Run executable |
-| `docker exec <CONTAINER ID> mariadb-dump -u root -p<password> tubes3_stima24 > dump.sql` | 
+| `docker exec <CONTAINER ID> mariadb-dump -u root -p<password> tubes3_stima24 > dump.sql` | dump database |
