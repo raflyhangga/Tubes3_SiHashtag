@@ -26,7 +26,7 @@ docker-compose up --build
 After you have build it, you can just run the following without needing to build it again. This will enable the database.
 ```
 docker-compose up
-``
+```
 
 Before starting the app, we need to restore the database with the existing dump. Open a new terminal. Run the following command and change the necessary field
 ```
